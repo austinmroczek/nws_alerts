@@ -4,13 +4,14 @@ import asyncio
 import hashlib
 import logging
 import uuid
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .const import (
     API_ENDPOINT,
@@ -140,7 +141,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
             coords = await self._get_tracker_gps()
         async with asyncio.timeout(self.timeout):
             try:
-                data = await update_alerts(self.config, coords)
+                data = await update_alerts(self.hass, self.config, coords)
             except AttributeError:
                 _LOGGER.debug(
                     "Error fetching most recent data from NWS Alerts API; will continue trying"
@@ -160,16 +161,16 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         return None
 
 
-async def update_alerts(config, coords) -> dict:
+async def update_alerts(hass: HomeAssistant, config, coords) -> dict:
     """Fetch new state data for the sensor.
     This is the only method that should fetch new data for Home Assistant.
     """
 
-    data = await async_get_state(config, coords)
+    data = await async_get_state(hass, config, coords)
     return data
 
 
-async def async_get_state(config, coords) -> dict:
+async def async_get_state(hass: HomeAssistant, config, coords) -> dict:
     """Query API for status."""
 
     zone_id = ""
@@ -203,27 +204,29 @@ async def async_get_state(config, coords) -> dict:
             gps_loc = config[CONF_GPS_LOC].replace(" ", "")
         _LOGGER.debug("getting state for %s from %s" % (gps_loc, url))
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers) as r:
-            if r.status == 200:
-                data = await r.json()
-            else:
-                _LOGGER.error("Problem updating NWS data: (%s)", r.status)
+    session = async_get_clientsession(hass)
+    async with session.get(url, headers=headers) as r:
+        if r.status == 200:
+            data = await r.json()
+        else:
+            _LOGGER.error("Problem updating NWS data: (%s)", r.status)
 
     if data is not None:
         # Reset values before reassigning
         if "zones" in data and zone_id != "":
             for zone in zone_id.split(","):
                 if zone in data["zones"]:
-                    values = await async_get_alerts(zone_id=zone_id)
+                    values = await async_get_alerts(hass, zone_id=zone_id)
                     break
         else:
-            values = await async_get_alerts(gps_loc=gps_loc)
+            values = await async_get_alerts(hass, gps_loc=gps_loc)
 
     return values
 
 
-async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
+async def async_get_alerts(
+    hass: HomeAssistant, zone_id: str = "", gps_loc: str = ""
+) -> dict:
     """Query API for Alerts."""
 
     url = ""
@@ -238,12 +241,12 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
         url = "%s/alerts/active?point=%s" % (API_ENDPOINT, gps_loc)
         _LOGGER.debug("getting alert for %s from %s" % (gps_loc, url))
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers) as r:
-            if r.status == 200:
-                data = await r.json()
-            else:
-                _LOGGER.error("Problem updating NWS data: (%s)", r.status)
+    session = async_get_clientsession(hass)
+    async with session.get(url, headers=headers) as r:
+        if r.status == 200:
+            data = await r.json()
+        else:
+            _LOGGER.error("Problem updating NWS data: (%s)", r.status)
 
     if data is not None:
         features = data["features"]
@@ -283,7 +286,7 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
 
         alerts["state"] = len(features)
         alerts["alerts"] = alert_list
-        alerts["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        alerts["last_updated"] = dt_util.utcnow()
 
     return alerts
 
