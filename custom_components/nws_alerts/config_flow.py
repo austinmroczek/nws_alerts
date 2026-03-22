@@ -5,13 +5,13 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import aiohttp
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.components.device_tracker import DOMAIN as TRACKER_DOMAIN
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
     API_ENDPOINT,
@@ -126,24 +126,21 @@ async def _get_zone_list(self) -> list | None:
 
     headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
 
-    url = API_ENDPOINT + "/zones?point=%s,%s" % (lat, lon)
+    url = f"{API_ENDPOINT}/zones?point={lat},{lon}"
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers) as r:
-            _LOGGER.debug("getting zone list for %s,%s from %s" % (lat, lon, url))
-            if r.status == 200:
-                data = await r.json()
+    _LOGGER.debug("getting zone list for %s,%s from %s", lat, lon, url)
+    session = async_get_clientsession(self.hass)
+    async with session.get(url, headers=headers) as r:
+        if r.status == 200:
+            data = await r.json()
 
-    zone_list = []
-    if data is not None:
-        if "features" in data:
-            x = 0
-            while len(data[JSON_FEATURES]) > x:
-                zone_list.append(data[JSON_FEATURES][x][JSON_PROPERTIES][JSON_ID])
-                x += 1
-            _LOGGER.debug("Zones list: %s", zone_list)
-            zone_list = ",".join(str(x) for x in zone_list)  # convert list to str
-            return zone_list
+    if data is not None and JSON_FEATURES in data:
+        zone_list = [
+            feature[JSON_PROPERTIES][JSON_ID]
+            for feature in data[JSON_FEATURES]
+        ]
+        _LOGGER.debug("Zones list: %s", zone_list)
+        return ",".join(zone_list)
     return None
 
 
@@ -156,15 +153,6 @@ class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Initialize."""
         self._data = {}
         self._errors = {}
-
-    # async def async_step_import(self, user_input: dict[str, Any]) -> FlowResult:
-    #     """Import a config entry."""
-
-    #     user_input = user_input[DOMAIN]
-    #     result: FlowResult = await self.async_step_user(user_input=user_input)
-    #     if errors := result.get("errors"):
-    #         return self.async_abort(reason=next(iter(errors.values())))
-    #     return result
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None

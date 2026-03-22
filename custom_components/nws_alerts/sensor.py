@@ -3,9 +3,10 @@ from typing import Final
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_ATTRIBUTION, CONF_NAME
+from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -30,14 +31,21 @@ SENSOR_TYPES: Final[dict[str, SensorEntityDescription]] = {
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass, entry, async_add_entities):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Setup the sensor platform."""
     sensors = [NWSAlertSensor(hass, entry, sensor) for sensor in SENSOR_TYPES.values()]
-    async_add_entities(sensors, True)
+    async_add_entities(sensors, False)
 
 
 class NWSAlertSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
+
+    _attr_has_entity_name = True
+    _attr_attribution = ATTRIBUTION
 
     def __init__(
         self,
@@ -48,13 +56,13 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(hass.data[DOMAIN][entry.entry_id][COORDINATOR])
         self._config = entry
-        self.coordinator = hass.data[DOMAIN][entry.entry_id][COORDINATOR]
         self._key = sensor_description.key
 
         self._attr_icon = sensor_description.icon
-        self._attr_name = f'{entry.data[CONF_NAME]} {sensor_description.name}'
+        self._attr_name = sensor_description.name
         self._attr_device_class = sensor_description.device_class
-        self._attr_unique_id = f"{slugify(self._attr_name)}_{entry.entry_id}"
+        # Preserve the pre-existing unique_id format for backwards compatibility
+        self._attr_unique_id = f"{slugify(f'{entry.data[CONF_NAME]} {sensor_description.name}')}_{entry.entry_id}"
 
     @property
     def native_value(self):
@@ -67,14 +75,12 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
-        """Return the state message."""
+        """Return the state attributes."""
         attrs = {}
         if self.coordinator.data is None:
             return attrs
         if "alerts" in self.coordinator.data and self._key == "state":
             attrs["Alerts"] = self.coordinator.data["alerts"]
-
-        attrs[ATTR_ATTRIBUTION] = ATTRIBUTION
         return attrs
 
     @property

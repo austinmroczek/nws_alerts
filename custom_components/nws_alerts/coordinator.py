@@ -34,7 +34,6 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         self.name = config[CONF_NAME]
         self.timeout = the_timeout
         self.config = config
-        self.hass = hass
 
         _LOGGER.debug("Data will be update every %s", self.interval)
 
@@ -47,7 +46,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
             coords = await self._get_tracker_gps()
         async with asyncio.timeout(self.timeout):
             try:
-                data = await update_alerts(self.hass, self.config, coords)
+                data = await async_get_state(self.hass, self.config, coords)
             except AttributeError:
                 _LOGGER.debug(
                     "Error fetching most recent data from NWS Alerts API; will continue trying"
@@ -65,13 +64,6 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         if entity and "source_type" in entity.attributes:
             return f"{entity.attributes['latitude']},{entity.attributes['longitude']}"
         return None
-
-
-async def update_alerts(hass: HomeAssistant, config, coords) -> dict:
-    """Fetch new state data for the sensor.
-    This is the only method that should fetch new data for Home Assistant.
-    """
-    return await async_get_state(hass, config, coords)
 
 
 async def async_get_state(hass: HomeAssistant, config, coords) -> dict:
