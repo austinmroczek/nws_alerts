@@ -1,19 +1,15 @@
 """ NWS Alerts """
 
+import asyncio
 import hashlib
 import logging
 import uuid
 from datetime import datetime, timedelta
 
 import aiohttp
-from async_timeout import timeout
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_registry import (
-    async_entries_for_config_entry,
-    async_get,
-)
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
@@ -47,20 +43,11 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     )
     hass.data.setdefault(DOMAIN, {})
 
-    if config_entry.unique_id is not None:
-        hass.config_entries.async_update_entry(config_entry, unique_id=None)
-
-        ent_reg = async_get(hass)
-        for entity in async_entries_for_config_entry(ent_reg, config_entry.entry_id):
-            ent_reg.async_update_entity(
-                entity.entity_id, new_unique_id=config_entry.entry_id
-            )
-
     updated_config = config_entry.data.copy()
 
     # Strip spaces from manually entered GPS locations
     if CONF_GPS_LOC in updated_config:
-        updated_config[CONF_GPS_LOC].replace(" ", "")
+        updated_config[CONF_GPS_LOC] = updated_config[CONF_GPS_LOC].replace(" ", "")
 
     if updated_config != config_entry.data:
         hass.config_entries.async_update_entry(config_entry, data=updated_config)
@@ -86,14 +73,12 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry):
+async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""
-    try:
-        await hass.config_entries.async_forward_entry_unload(config_entry, "sensor")
-        _LOGGER.info("Successfully removed sensor from the " + DOMAIN + " integration")
-    except ValueError:
-        pass
-    return True
+    unloaded = await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
+    if unloaded:
+        _LOGGER.info("Successfully removed sensor from the %s integration", DOMAIN)
+    return unloaded
 
 
 async def update_listener(hass: HomeAssistant, config_entry: ConfigEntry):
@@ -111,22 +96,22 @@ async def update_listener(hass: HomeAssistant, config_entry: ConfigEntry):
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
-async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Migrate an old config entry."""
     version = config_entry.version
 
-    # 1-> 2: Migration format
+    # 1 -> 2: Add interval and timeout defaults
     if version == 1:
         _LOGGER.debug("Migrating from version %s", version)
         updated_config = config_entry.data.copy()
 
-        if CONF_INTERVAL not in updated_config.keys():
+        if CONF_INTERVAL not in updated_config:
             updated_config[CONF_INTERVAL] = DEFAULT_INTERVAL
-        if CONF_TIMEOUT not in updated_config.keys():
+        if CONF_TIMEOUT not in updated_config:
             updated_config[CONF_TIMEOUT] = DEFAULT_TIMEOUT
 
-    if updated_config != config_entry.data:
-        hass.config_entries.async_update_entry(config_entry, data=updated_config)
+        if updated_config != config_entry.data:
+            hass.config_entries.async_update_entry(config_entry, data=updated_config)
 
         _LOGGER.debug("Migration to version %s complete", CONFIG_VERSION)
 
@@ -153,7 +138,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         coords = None
         if CONF_TRACKER in self.config:
             coords = await self._get_tracker_gps()
-        async with timeout(self.timeout):
+        async with asyncio.timeout(self.timeout):
             try:
                 data = await update_alerts(self.config, coords)
             except AttributeError:
@@ -223,7 +208,7 @@ async def async_get_state(config, coords) -> dict:
             if r.status == 200:
                 data = await r.json()
             else:
-                _LOGGER.error("Problem updating NWS data: (%s) - %s", r.status, r.body)
+                _LOGGER.error("Problem updating NWS data: (%s)", r.status)
 
     if data is not None:
         # Reset values before reassigning
@@ -258,7 +243,7 @@ async def async_get_alerts(zone_id: str = "", gps_loc: str = "") -> dict:
             if r.status == 200:
                 data = await r.json()
             else:
-                _LOGGER.error("Problem updating NWS data: (%s) - %s", r.status, r.body)
+                _LOGGER.error("Problem updating NWS data: (%s)", r.status)
 
     if data is not None:
         features = data["features"]
