@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     """Load the saved entities."""
     # Print startup message
     _LOGGER.info(
-        "Version %s is starting, if you have any issues please report" " them here: %s",
+        "Version %s is starting, if you have any issues please report them here: %s",
         VERSION,
         ISSUE_URL,
     )
@@ -146,7 +146,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
                 _LOGGER.debug(
                     "Error fetching most recent data from NWS Alerts API; will continue trying"
                 )
-                data = "AttributeError"
+                return self.data
             except Exception as error:
                 raise UpdateFailed(error) from error
             _LOGGER.debug("Data: %s", data)
@@ -175,7 +175,7 @@ async def async_get_state(hass: HomeAssistant, config, coords) -> dict:
 
     zone_id = ""
     gps_loc = ""
-    url = "%s/alerts/active/count" % API_ENDPOINT
+    url = f"{API_ENDPOINT}/alerts/active/count"
     values = {
         "state": 0,
         "event": None,
@@ -196,13 +196,13 @@ async def async_get_state(hass: HomeAssistant, config, coords) -> dict:
 
     if CONF_ZONE_ID in config:
         zone_id = config[CONF_ZONE_ID]
-        _LOGGER.debug("getting state for %s from %s" % (zone_id, url))
+        _LOGGER.debug("getting state for %s from %s", zone_id, url)
     elif CONF_GPS_LOC in config or CONF_TRACKER in config:
         if coords is not None:
             gps_loc = coords
         else:
             gps_loc = config[CONF_GPS_LOC].replace(" ", "")
-        _LOGGER.debug("getting state for %s from %s" % (gps_loc, url))
+        _LOGGER.debug("getting state for %s from %s", gps_loc, url)
 
     session = async_get_clientsession(hass)
     async with session.get(url, headers=headers) as r:
@@ -235,11 +235,11 @@ async def async_get_alerts(
     data = None
 
     if zone_id != "":
-        url = "%s/alerts/active?zone=%s" % (API_ENDPOINT, zone_id)
-        _LOGGER.debug("getting alert for %s from %s" % (zone_id, url))
+        url = f"{API_ENDPOINT}/alerts/active?zone={zone_id}"
+        _LOGGER.debug("getting alert for %s from %s", zone_id, url)
     elif gps_loc != "":
-        url = "%s/alerts/active?point=%s" % (API_ENDPOINT, gps_loc)
-        _LOGGER.debug("getting alert for %s from %s" % (gps_loc, url))
+        url = f"{API_ENDPOINT}/alerts/active?point={gps_loc}"
+        _LOGGER.debug("getting alert for %s from %s", gps_loc, url)
 
     session = async_get_clientsession(hass)
     async with session.get(url, headers=headers) as r:
