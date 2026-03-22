@@ -1,13 +1,11 @@
 import logging
-import uuid
 from typing import Final
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntityDescription
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_ATTRIBUTION, CONF_NAME
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.device_registry import DeviceEntryType
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
@@ -39,7 +37,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async_add_entities(sensors, True)
 
 
-class NWSAlertSensor(CoordinatorEntity):
+class NWSAlertSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(
@@ -60,11 +58,11 @@ class NWSAlertSensor(CoordinatorEntity):
         self._attr_unique_id = f"{slugify(self._attr_name)}_{entry.entry_id}"
 
     @property
-    def state(self) -> int | None:
+    def native_value(self):
         """Return the state of the sensor."""
         if self.coordinator.data is None:
             return None
-        elif self._key in self.coordinator.data.keys():
+        elif self._key in self.coordinator.data:
             return self.coordinator.data[self._key]
         return None
 
@@ -90,8 +88,3 @@ class NWSAlertSensor(CoordinatorEntity):
             name="NWS Alerts",
         )
 
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated data from the coordinator."""
-        if self.coordinator.data != "AttributeError":
-            self.async_write_ha_state()
