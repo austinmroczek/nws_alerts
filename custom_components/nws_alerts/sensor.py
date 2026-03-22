@@ -25,7 +25,6 @@ SENSOR_TYPES: Final[dict[str, SensorEntityDescription]] = {
 # API Documentation
 # ---------------------------------------------------------
 # https://www.weather.gov/documentation/services-web-api
-# https://forecast-v3.weather.gov/documentation
 # ---------------------------------------------------------
 
 _LOGGER = logging.getLogger(__name__)
