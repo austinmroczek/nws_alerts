@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, List
+from typing import Any
 
 import aiohttp
 import voluptuous as vol
@@ -99,9 +99,9 @@ def _get_schema_tracker(hass: Any, user_input: list, default_dict: list) -> Any:
 def _get_entities(
     hass: HomeAssistant,
     domain: str,
-    search: List[str] = None,
-    extra_entities: List[str] = None,
-) -> List[str]:
+    search: list[str] | None = None,
+    extra_entities: list[str] | None = None,
+) -> list[str]:
     data = ["(none)"]
     if domain not in hass.data:
         return data
@@ -147,12 +147,10 @@ async def _get_zone_list(self) -> list | None:
     return None
 
 
-@config_entries.HANDLERS.register(DOMAIN)
 class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for NWS Alerts."""
 
     VERSION = CONFIG_VERSION
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self):
         """Initialize."""
@@ -180,7 +178,7 @@ class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the flow initialized by the user."""
         return self.async_show_menu(step_id="gps", menu_options=MENU_GPS)
 
-    async def async_step_gps_tracker(self, user_input={}):
+    async def async_step_gps_tracker(self, user_input=None):
         """Handle a flow for device trackers."""
         self._errors = {}
         if user_input is not None:
@@ -204,7 +202,7 @@ class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def async_step_gps_loc(self, user_input={}):
+    async def async_step_gps_loc(self, user_input=None):
         """Handle a flow initialized by the user."""
         lat = self.hass.config.latitude
         lon = self.hass.config.longitude
@@ -233,7 +231,7 @@ class NWSAlertsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def async_step_zone(self, user_input={}):
+    async def async_step_zone(self, user_input=None):
         """Handle a flow initialized by the user."""
         self._errors = {}
         self._zone_list = await _get_zone_list(self)
@@ -282,7 +280,7 @@ class NWSAlertsOptionsFlow(config_entries.OptionsFlow):
             return self.async_create_entry(title="", data=self._data)
         return await self._show_options_form(user_input)
 
-    async def async_step_gps_loc(self, user_input={}):
+    async def async_step_gps_loc(self, user_input=None):
         """Handle a flow initialized by the user."""
         self._errors = {}
 
@@ -291,7 +289,7 @@ class NWSAlertsOptionsFlow(config_entries.OptionsFlow):
             return self.async_create_entry(title="", data=self._data)
         return await self._show_options_form(user_input)
 
-    async def async_step_gps_tracker(self, user_input={}):
+    async def async_step_gps_tracker(self, user_input=None):
         """Handle a flow initialized by the user."""
         self._errors = {}
 
@@ -300,7 +298,7 @@ class NWSAlertsOptionsFlow(config_entries.OptionsFlow):
             return self.async_create_entry(title="", data=self._data)
         return await self._show_options_form(user_input)
 
-    async def async_step_zone(self, user_input={}):
+    async def async_step_zone(self, user_input=None):
         """Handle a flow initialized by the user."""
         self._errors = {}
 
