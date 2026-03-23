@@ -28,25 +28,21 @@ The sensor that is created is used in my "NWS Alerts" package: https://github.co
 
 You can also display the generated alerts in your frontend. For example usage see: https://github.com/finity69x2/nws_alerts/blob/master/lovelace/alerts_tab.yaml
 
-## Installation:
+## Installation
 
-<b>Manually:</b>
+### HACS (Recommended)
 
-Clone the Repository and copy the "nws_individual_alerts" directory to your "custom_components" directory in your config directory
+1. Open **HACS → Integrations → ⋮ → Custom repositories** in Home Assistant
+2. Add the repository URL `https://github.com/austinmroczek/nws_alerts` and select **Integration** as the category
+3. Find and install **NWS Individual Alerts** through the search function
+4. Restart Home Assistant to complete the setup
 
-```<config directory>/custom_components/nws_individual_alerts/...```
+### Manual Installation
 
-<b>HACS:</b>
+1. Copy the `custom_components/nws_individual_alerts/` directory into your Home Assistant `config/custom_components/` folder
+2. Restart Home Assistant
 
-open the HACS section of Home Assistant.
-
-Click the "+ Explore & Download Repositories" button in the bottom right corner.
-
-In the window that opens search for "NWS Alerts".
-
-In the window that opens when you select it click on "Install This Repository in HACS"
-
-After installing the integration you can then configure it using the instructions in the following section.
+After restarting, configure the integration using the instructions in the following section.
 
 ## Configuration:
 
