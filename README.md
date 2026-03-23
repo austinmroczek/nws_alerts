@@ -79,19 +79,10 @@ The categories and the NWS event types they cover:
 | **Storm Surge**               | Storm Surge Warning, Storm Surge Watch                                         |
 | **Tsunami**                   | Tsunami Advisory, Tsunami Warning, Tsunami Watch                               |
 | **Tornado**                   | Tornado Warning, Tornado Watch                                                 |
-| **Severe Thunderstorm**       | Severe Thunderstorm Warning, Severe Thunderstorm Watch                         |
-| **Hurricane**                 | Hurricane Warning, Hurricane Watch                                             |
-| **Hurricane Force Wind**      | Hurricane Force Wind Warning, Hurricane Force Wind Watch                       |
-| **Tropical Storm**            | Tropical Storm Warning, Tropical Storm Watch                                   |
-| **Tropical Cyclone**          | Tropical Cyclone Local Statement                                               |
-| **Typhoon**                   | Typhoon Warning, Typhoon Watch                                                 |
-| **Storm**                     | Storm Warning, Storm Watch                                                     |
-| **High Wind**                 | High Wind Warning, High Wind Watch                                             |
-| **Extreme Wind**              | Extreme Wind Warning                                                           |
+| **Hurricane**                 | Hurricane Warning/Watch, Hurricane Force Wind Warning/Watch, Tropical Storm Warning/Watch, Tropical Cyclone Local Statement, Typhoon Warning/Watch |
+| **Storm**                     | Severe Thunderstorm Warning, Severe Thunderstorm Watch, Storm Warning, Storm Watch |
+| **Wind**                      | High Wind Warning/Watch, Extreme Wind Warning, Brisk Wind Advisory, Lake Wind Advisory, Wind Advisory |
 | **Gale**                      | Gale Warning, Gale Watch                                                       |
-| **Wind**                      | Wind Advisory                                                                  |
-| **Brisk Wind**                | Brisk Wind Advisory                                                            |
-| **Lake Wind**                 | Lake Wind Advisory                                                             |
 | **Dust**                      | Dust Advisory, Blowing Dust Advisory, Blowing Dust Warning, Dust Storm Warning |
 | **Dense Fog**                 | Dense Fog Advisory                                                             |
 | **Dense Smoke**               | Dense Smoke Advisory                                                           |

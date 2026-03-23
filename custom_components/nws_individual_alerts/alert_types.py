@@ -63,54 +63,36 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
         "Tornado Warning",
         "Tornado Watch",
     }),
-    "Severe Thunderstorm": frozenset({
-        "Severe Thunderstorm Warning",
-        "Severe Thunderstorm Watch",
-    }),
     "Hurricane": frozenset({
         "Hurricane Warning",
         "Hurricane Watch",
-    }),
-    "Hurricane Force Wind": frozenset({
         "Hurricane Force Wind Warning",
         "Hurricane Force Wind Watch",
-    }),
-    "Tropical Storm": frozenset({
+        "Tropical Cyclone Local Statement",
         "Tropical Storm Warning",
         "Tropical Storm Watch",
-    }),
-    "Tropical Cyclone": frozenset({
-        "Tropical Cyclone Local Statement",
-    }),
-    "Typhoon": frozenset({
         "Typhoon Warning",
         "Typhoon Watch",
     }),
     "Storm": frozenset({
+        "Severe Thunderstorm Warning",
+        "Severe Thunderstorm Watch",
         "Storm Warning",
         "Storm Watch",
     }),
 
     # --- Wind ------------------------------------------------------------------
-    "High Wind": frozenset({
+    "Wind": frozenset({
+        "Brisk Wind Advisory",
+        "Extreme Wind Warning",
         "High Wind Warning",
         "High Wind Watch",
-    }),
-    "Extreme Wind": frozenset({
-        "Extreme Wind Warning",
+        "Lake Wind Advisory",
+        "Wind Advisory",
     }),
     "Gale": frozenset({
         "Gale Warning",
         "Gale Watch",
-    }),
-    "Wind": frozenset({
-        "Wind Advisory",
-    }),
-    "Brisk Wind": frozenset({
-        "Brisk Wind Advisory",
-    }),
-    "Lake Wind": frozenset({
-        "Lake Wind Advisory",
     }),
 
     # --- Dust / Visibility -----------------------------------------------------
