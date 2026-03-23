@@ -10,6 +10,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
+from .alert_types import ALERT_GROUPS
 from .const import ATTRIBUTION, COORDINATOR, DOMAIN
 
 SENSOR_TYPES: Final[dict[str, SensorEntityDescription]] = {
@@ -30,6 +31,19 @@ SENSOR_TYPES: Final[dict[str, SensorEntityDescription]] = {
 
 _LOGGER = logging.getLogger(__name__)
 
+# Severity rank used to pick the highest active level.
+_SEVERITY: dict[str, int] = {"none": 0, "advisory": 1, "watch": 2, "warning": 3}
+
+
+def _event_level(event: str) -> str:
+    """Return advisory/watch/warning for a NWS event type name."""
+    lower = event.lower()
+    if lower.endswith("warning"):
+        return "warning"
+    if lower.endswith("watch"):
+        return "watch"
+    return "advisory"
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -37,7 +51,14 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Setup the sensor platform."""
-    sensors = [NWSAlertSensor(hass, entry, sensor) for sensor in SENSOR_TYPES.values()]
+    coordinator = hass.data[DOMAIN][entry.entry_id][COORDINATOR]
+    sensors: list[SensorEntity] = [
+        NWSAlertSensor(hass, entry, sensor) for sensor in SENSOR_TYPES.values()
+    ]
+    sensors += [
+        NWSAlertGroupSensor(coordinator, entry, name, alert_types)
+        for name, alert_types in ALERT_GROUPS.items()
+    ]
     async_add_entities(sensors, False)
 
 
@@ -93,3 +114,65 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
             name="NWS Alerts",
         )
 
+
+class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
+    """Sensor that reports the highest active severity level for one alert topic."""
+
+    _attr_has_entity_name = True
+    _attr_attribution = ATTRIBUTION
+    _attr_device_class = SensorDeviceClass.ENUM
+    _attr_options = ["none", "advisory", "watch", "warning"]
+    _attr_icon = "mdi:alert"
+
+    def __init__(
+        self,
+        coordinator,
+        entry: ConfigEntry,
+        name: str,
+        alert_types: frozenset[str],
+    ) -> None:
+        """Initialize the group sensor."""
+        super().__init__(coordinator)
+        self._config = entry
+        self._alert_types = alert_types
+        self._attr_name = name
+        self._attr_unique_id = f"{slugify(name)}_{entry.entry_id}"
+
+    @property
+    def native_value(self) -> str | None:
+        """Return the highest active severity level, or None if no alerts are active."""
+        if self.coordinator.data is None or "alerts" not in self.coordinator.data:
+            return "none"
+        active = [
+            alert for alert in self.coordinator.data["alerts"]
+            if alert["Event"] in self._alert_types
+        ]
+        if not active:
+            return "none"
+        return max((_event_level(alert["Event"]) for alert in active), key=_SEVERITY.get)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return the active alert event names and their full details."""
+        if self.coordinator.data is None or "alerts" not in self.coordinator.data:
+            return {}
+        active = [
+            alert for alert in self.coordinator.data["alerts"]
+            if alert["Event"] in self._alert_types
+        ]
+        if not active:
+            return {}
+        return {
+            "active_alerts": [alert["Event"] for alert in active],
+            "alerts": active,
+        }
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device registry information."""
+        return DeviceInfo(
+            entry_type=DeviceEntryType.SERVICE,
+            identifiers={(DOMAIN, self._config.entry_id)},
+            manufacturer="NWS",
+            name="NWS Alerts",
+        )

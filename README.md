@@ -22,7 +22,7 @@ This integration retrieves updated weather alerts every minute from the US NWS A
 
 You can configure the integration to use your NWS Zone, your precise location via GPS coordinates or you can get dynamic location alerts by configuring the integration to use a device_tracker entity from HA as long as that device tracker provides GPS coordinates.
 
-The integration presents the number of currently active alerts as the state of the sensor and lists many alert details as a list in the attributes of the sensor.
+The integration presents the number of currently active alerts as the state of the main sensor and lists full alert details as a list in its attributes. It also creates one sensor per alert category that reports the highest active severity level (`advisory`, `watch`, or `warning`) for that category.
 
 The sensor that is created is used in my "NWS Alerts" package: https://github.com/finity69x2/nws_alerts/blob/master/packages/nws_alerts_package.yaml
 
@@ -69,6 +69,101 @@ https://github.com/finity69x2/nws_alerts/blob/master/lookup_options.md
 If you select the "Using a device tracker" option under the "GPS Location" option then HA will use the GPS coordinates provided by that tracker to query for alerts so you should follow the same recommendations for using GPS coordinates when using that option.
 
 After you restart Home Assistant then you should have a new sensor (by default) called "sensor.nws_alerts" in your system.
+
+## Alert Category Sensors
+
+In addition to the main alert count sensor, the integration creates one **ENUM sensor per alert category**. Each sensor's state is the highest active severity level among alerts in that category:
+
+| State | Meaning |
+| --- | --- |
+| `none` | No active alerts in this category |
+| `advisory` | An advisory, statement, outlook, or similar low-level alert is active |
+| `watch` | A watch is active — conditions are favorable for the hazard |
+| `warning` | A warning is active — the hazard is imminent or occurring |
+
+Each sensor exposes two attributes when active:
+
+- `active_alerts` — list of alert event names currently active in that category
+- `alerts` — full detail list (same structure as the main sensor's `Alerts` attribute)
+
+The categories and the NWS event types they cover:
+
+| Sensor | Alert Types Covered |
+| --- | --- |
+| **Flash Flood** | Flash Flood Statement, Flash Flood Warning, Flash Flood Watch |
+| **Flood** | Flood Advisory, Flood Statement, Flood Warning, Flood Watch |
+| **Coastal Flood** | Coastal Flood Advisory/Statement/Warning/Watch |
+| **Lakeshore Flood** | Lakeshore Flood Advisory/Statement/Warning/Watch |
+| **Storm Surge** | Storm Surge Warning, Storm Surge Watch |
+| **Tsunami** | Tsunami Advisory, Tsunami Warning, Tsunami Watch |
+| **Tornado** | Tornado Warning, Tornado Watch |
+| **Severe Thunderstorm** | Severe Thunderstorm Warning, Severe Thunderstorm Watch |
+| **Hurricane** | Hurricane Warning, Hurricane Watch |
+| **Hurricane Force Wind** | Hurricane Force Wind Warning, Hurricane Force Wind Watch |
+| **Tropical Storm** | Tropical Storm Warning, Tropical Storm Watch |
+| **Tropical Cyclone** | Tropical Cyclone Local Statement |
+| **Typhoon** | Typhoon Warning, Typhoon Watch |
+| **Storm** | Storm Warning, Storm Watch |
+| **High Wind** | High Wind Warning, High Wind Watch |
+| **Extreme Wind** | Extreme Wind Warning |
+| **Gale** | Gale Warning, Gale Watch |
+| **Wind** | Wind Advisory |
+| **Brisk Wind** | Brisk Wind Advisory |
+| **Lake Wind** | Lake Wind Advisory |
+| **Blowing Dust** | Blowing Dust Advisory, Blowing Dust Warning |
+| **Dust Storm** | Dust Storm Warning |
+| **Dust** | Dust Advisory |
+| **Dense Fog** | Dense Fog Advisory |
+| **Dense Smoke** | Dense Smoke Advisory |
+| **Winter Storm** | Winter Storm Warning, Winter Storm Watch |
+| **Blizzard** | Blizzard Warning |
+| **Ice Storm** | Ice Storm Warning |
+| **Snow Squall** | Snow Squall Warning |
+| **Lake Effect Snow** | Lake Effect Snow Warning |
+| **Freeze** | Freeze Warning, Freeze Watch |
+| **Extreme Cold** | Extreme Cold Warning, Extreme Cold Watch |
+| **Winter Weather** | Winter Weather Advisory |
+| **Frost** | Frost Advisory |
+| **Freezing Fog** | Freezing Fog Advisory |
+| **Freezing Spray** | Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch |
+| **Avalanche** | Avalanche Advisory, Avalanche Warning, Avalanche Watch |
+| **Extreme Heat** | Extreme Heat Warning, Extreme Heat Watch |
+| **Heat** | Heat Advisory |
+| **Fire** | Fire Warning, Fire Weather Watch |
+| **Red Flag** | Red Flag Warning |
+| **Extreme Fire Danger** | Extreme Fire Danger |
+| **Ashfall** | Ashfall Advisory, Ashfall Warning |
+| **Volcano** | Volcano Warning |
+| **High Surf** | High Surf Advisory, High Surf Warning |
+| **Hazardous Seas** | Hazardous Seas Warning, Hazardous Seas Watch |
+| **Small Craft** | Small Craft Advisory |
+| **Special Marine** | Special Marine Warning |
+| **Rip Current** | Rip Current Statement |
+| **Beach Hazards** | Beach Hazards Statement |
+| **Marine Weather** | Marine Weather Statement |
+| **Air Quality** | Air Quality Alert |
+| **Air Stagnation** | Air Stagnation Advisory |
+| **Cold Weather** | Cold Weather Advisory |
+| **Low Water** | Low Water Advisory |
+| **Hydrologic** | Hydrologic Outlook |
+| **Hazardous Weather** | Hazardous Weather Outlook |
+| **Severe Weather** | Severe Weather Statement |
+| **Special Weather** | Special Weather Statement |
+| **Earthquake** | Earthquake Warning |
+| **Civil Danger** | Civil Danger Warning |
+| **Civil Emergency** | Civil Emergency Message |
+| **Child Abduction Emergency** | Child Abduction Emergency |
+| **Evacuation** | Evacuation Immediate |
+| **Shelter In Place** | Shelter In Place Warning |
+| **Law Enforcement** | Law Enforcement Warning |
+| **Local Area Emergency** | Local Area Emergency |
+| **Nuclear Power Plant** | Nuclear Power Plant Warning |
+| **Radiological Hazard** | Radiological Hazard Warning |
+| **Hazardous Materials** | Hazardous Materials Warning |
+| **911 Telephone Outage** | 911 Telephone Outage |
+| **Blue Alert** | Blue Alert |
+
+The full list of NWS alert event types is available at: <https://api.weather.gov/alerts/types>
 
 ## Testing
 
