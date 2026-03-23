@@ -114,15 +114,11 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     }),
 
     # --- Dust / Visibility -----------------------------------------------------
-    "Blowing Dust": frozenset({
+    "Dust": frozenset({
         "Blowing Dust Advisory",
         "Blowing Dust Warning",
-    }),
-    "Dust Storm": frozenset({
-        "Dust Storm Warning",
-    }),
-    "Dust": frozenset({
         "Dust Advisory",
+        "Dust Storm Warning",
     }),
     "Dense Fog": frozenset({
         "Dense Fog Advisory",
@@ -135,6 +131,7 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     "Winter Storm": frozenset({
         "Winter Storm Warning",
         "Winter Storm Watch",
+        "Winter Weather Advisory",
     }),
     "Blizzard": frozenset({
         "Blizzard Warning",
@@ -155,9 +152,6 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     "Extreme Cold": frozenset({
         "Extreme Cold Warning",
         "Extreme Cold Watch",
-    }),
-    "Winter Weather": frozenset({
-        "Winter Weather Advisory",
     }),
     "Frost": frozenset({
         "Frost Advisory",

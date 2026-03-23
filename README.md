@@ -108,9 +108,7 @@ The categories and the NWS event types they cover:
 | **Wind**                      | Wind Advisory                                                 |
 | **Brisk Wind**                | Brisk Wind Advisory                                           |
 | **Lake Wind**                 | Lake Wind Advisory                                            |
-| **Blowing Dust**              | Blowing Dust Advisory, Blowing Dust Warning                   |
-| **Dust Storm**                | Dust Storm Warning                                            |
-| **Dust**                      | Dust Advisory                                                 |
+| **Dust**                      | Dust Advisory, Blowing Dust Advisory, Blowing Dust Warning, Dust Storm Warning |
 | **Dense Fog**                 | Dense Fog Advisory                                            |
 | **Dense Smoke**               | Dense Smoke Advisory                                          |
 | **Winter Storm**              | Winter Storm Warning, Winter Storm Watch                      |
