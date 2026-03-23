@@ -1,21 +1,5 @@
 # Alerts from the US National Weather Service  (nws_individual_alerts)
 
-## BREAKING CHANGES IN V5.0
-
-This is a pretty much complete rewrite of the integration to better organize the data for the alerts. All of the data provided by the older versions is still included but it's laid out very differently and as such none of the associated automations package or dashboard examples will continue to function as there currently are.
-
-There are newly updated code examples in this repo "packages" and "lovelace" folders. I have done extensive testing to ensure that the new updated package examples work as desired but of course I couldn't test every situation.
-
-For further support and actual attribute examples please go to the "official" integration thread on the HA forum. The information about the update starts at post #545:
-
-https://community.home-assistant.io/t/severe-weather-alerts-from-the-us-national-weather-service/71853/545
-
-<s><b>Use at your own risk!</b></s>
-
-That was probably overly fatalistic. I just wanted people to understand that there could be unforseen bugs in the integration or more likely the code examples and to be aware of that.
-
-## Description:
-
 An updated version of the nws_alerts custom integration for Home Assistant originally found at github.com/eracknaphobia/nws_custom_component, and then upgraded  at https://github.com/finity69x2/nws_alerts
 
 This integration retrieves updated weather alerts every minute from the US NWS API (by default but it can be changed in the config options).
@@ -46,9 +30,9 @@ After restarting, configure the integration using the instructions in the follow
 
 ## Configuration:
 
-<b>NOTE: As of HA versoin 2024.5.x the yaml configuration option is broken. I don't know if it will ever be fixed so the only viable config option is via the UI</b>
+</b>
 
-<b>You can configure the integration via the "Configuration->Integrations" section of the Home Assistant UI:</b>
+You can configure the integration via the "Configuration->Integrations" section of the Home Assistant UI:</b>
 
 Click on "+ Add Integration" buuton in the bottom right corner.
 
