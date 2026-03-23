@@ -6,7 +6,7 @@ import pytest
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.nws_alerts.const import DOMAIN
+from custom_components.nws_individual_alerts.const import DOMAIN
 from tests.const import CONFIG_DATA, CONFIG_DATA_3
 
 pytestmark = pytest.mark.asyncio

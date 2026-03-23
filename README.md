@@ -1,4 +1,4 @@
-# Alerts from the US National Weather Service  (nws_alerts)
+# Alerts from the US National Weather Service  (nws_individual_alerts)
 
 ## BREAKING CHANGES IN V5.0
 
@@ -32,9 +32,9 @@ You can also display the generated alerts in your frontend. For example usage se
 
 <b>Manually:</b>
 
-Clone the Repository and copy the "nws_alerts" directory to your "custom_components" directory in your config directory
+Clone the Repository and copy the "nws_individual_alerts" directory to your "custom_components" directory in your config directory
 
-```<config directory>/custom_components/nws_alerts/...```
+```<config directory>/custom_components/nws_individual_alerts/...```
   
 <b>HACS:</b>
 
@@ -68,7 +68,7 @@ https://github.com/finity69x2/nws_alerts/blob/master/lookup_options.md
 
 If you select the "Using a device tracker" option under the "GPS Location" option then HA will use the GPS coordinates provided by that tracker to query for alerts so you should follow the same recommendations for using GPS coordinates when using that option.
 
-After you restart Home Assistant then you should have a new sensor (by default) called "sensor.nws_alerts" in your system.
+After you restart Home Assistant then you should have a new sensor (by default) called "sensor.nws_individual_alerts" in your system.
 
 ## Alert Category Sensors
 

@@ -5,7 +5,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.util import slugify
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.nws_alerts.const import DOMAIN
+from custom_components.nws_individual_alerts.const import DOMAIN
 from tests.const import CONFIG_DATA, CONFIG_DATA_2, CONFIG_DATA_BAD
 
 pytestmark = pytest.mark.asyncio
@@ -25,7 +25,7 @@ async def test_sensor(hass, mock_api):
     assert await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
 
-    assert "nws_alerts" in hass.config.components
+    assert "nws_individual_alerts" in hass.config.components
     state = hass.states.get(NWS_SENSOR)
     assert state
     assert state.state == "2"

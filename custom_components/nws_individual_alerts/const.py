@@ -12,14 +12,14 @@ CONF_GPS_LOC = "gps_loc"
 CONF_TRACKER = "tracker"
 
 # Defaults
-DEFAULT_NAME = "NWS Alerts"
+DEFAULT_NAME = "NWS Individual Alerts"
 DEFAULT_INTERVAL = 1
 DEFAULT_TIMEOUT = 120
 
 # Misc
 VERSION = "2.7"
-ISSUE_URL = "https://github.com/finity69x2/nws_alert"
-DOMAIN = "nws_alerts"
+ISSUE_URL = "https://github.com/austinmroczek/nws_alerts/issues"
+DOMAIN = "nws_individual_alerts"
 ATTRIBUTION = "Data provided by Weather.gov"
 COORDINATOR = "coordinator"
 PLATFORMS = [Platform.SENSOR]

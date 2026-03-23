@@ -8,7 +8,7 @@ from homeassistant.const import CONF_NAME
 from homeassistant.data_entry_flow import FlowResult, FlowResultType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.nws_alerts.const import CONF_ZONE_ID, DOMAIN
+from custom_components.nws_individual_alerts.const import CONF_ZONE_ID, DOMAIN
 from tests.const import CONFIG_DATA
 
 pytestmark = pytest.mark.asyncio
@@ -45,7 +45,7 @@ async def test_form_zone(
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
     with patch(
-        "custom_components.nws_alerts.config_flow._get_zone_list", return_value=None
+        "custom_components.nws_individual_alerts.config_flow._get_zone_list", return_value=None
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -54,10 +54,10 @@ async def test_form_zone(
         # assert result["title"] == title_1
 
     with patch(
-        "custom_components.nws_alerts.async_setup_entry",
+        "custom_components.nws_individual_alerts.async_setup_entry",
         return_value=True,
     ) as mock_setup_entry, patch(
-        "custom_components.nws_alerts.config_flow._get_zone_list", return_value=None
+        "custom_components.nws_individual_alerts.config_flow._get_zone_list", return_value=None
     ):
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {"next_step_id": "zone"}
@@ -109,7 +109,7 @@ async def test_form_gps(
     """Test we get the form."""
     await setup.async_setup_component(hass, "persistent_notification", {})
     with patch(
-        "custom_components.nws_alerts.config_flow._get_zone_list", return_value=None
+        "custom_components.nws_individual_alerts.config_flow._get_zone_list", return_value=None
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -118,10 +118,10 @@ async def test_form_gps(
         # assert result["title"] == title_1
 
     with patch(
-        "custom_components.nws_alerts.async_setup_entry",
+        "custom_components.nws_individual_alerts.async_setup_entry",
         return_value=True,
     ) as mock_setup_entry, patch(
-        "custom_components.nws_alerts.config_flow._get_zone_list", return_value=None
+        "custom_components.nws_individual_alerts.config_flow._get_zone_list", return_value=None
     ):
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {"next_step_id": "gps"}
@@ -163,7 +163,7 @@ async def test_form_gps(
 #     await setup.async_setup_component(hass, "persistent_notification", {})
 
 #     with patch(
-#         "custom_components.nws_alerts.async_setup_entry",
+#         "custom_components.nws_individual_alerts.async_setup_entry",
 #         return_value=True,
 #     ):
 #         result = await hass.config_entries.flow.async_init(
