@@ -111,29 +111,19 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
 
     # --- Winter / Ice ----------------------------------------------------------
     "Winter Storm": frozenset({
+        "Blizzard Warning",
+        "Extreme Cold Warning",
+        "Extreme Cold Watch",
+        "Ice Storm Warning",
+        "Lake Effect Snow Warning",
+        "Snow Squall Warning",
         "Winter Storm Warning",
         "Winter Storm Watch",
         "Winter Weather Advisory",
     }),
-    "Blizzard": frozenset({
-        "Blizzard Warning",
-    }),
-    "Ice Storm": frozenset({
-        "Ice Storm Warning",
-    }),
-    "Snow Squall": frozenset({
-        "Snow Squall Warning",
-    }),
-    "Lake Effect Snow": frozenset({
-        "Lake Effect Snow Warning",
-    }),
     "Freeze": frozenset({
         "Freeze Warning",
         "Freeze Watch",
-    }),
-    "Extreme Cold": frozenset({
-        "Extreme Cold Warning",
-        "Extreme Cold Watch",
     }),
     "Frost": frozenset({
         "Frost Advisory",
@@ -153,10 +143,10 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     }),
 
     # --- Heat ------------------------------------------------------------------
-    "Extreme Heat": frozenset({
-        "Heat Advisory",
+    "Heat": frozenset({
         "Extreme Heat Warning",
         "Extreme Heat Watch",
+        "Heat Advisory",
     }),
 
     # --- Fire ------------------------------------------------------------------

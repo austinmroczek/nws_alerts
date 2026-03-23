@@ -86,20 +86,13 @@ The categories and the NWS event types they cover:
 | **Dust**                      | Dust Advisory, Blowing Dust Advisory, Blowing Dust Warning, Dust Storm Warning |
 | **Dense Fog**                 | Dense Fog Advisory                                                             |
 | **Dense Smoke**               | Dense Smoke Advisory                                                           |
-| **Winter Storm**              | Winter Storm Warning, Winter Storm Watch                                       |
-| **Blizzard**                  | Blizzard Warning                                                               |
-| **Ice Storm**                 | Ice Storm Warning                                                              |
-| **Snow Squall**               | Snow Squall Warning                                                            |
-| **Lake Effect Snow**          | Lake Effect Snow Warning                                                       |
+| **Winter Storm**              | Blizzard Warning, Extreme Cold Warning/Watch, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning/Watch, Winter Weather Advisory |
 | **Freeze**                    | Freeze Warning, Freeze Watch                                                   |
-| **Extreme Cold**              | Extreme Cold Warning, Extreme Cold Watch                                       |
-| **Winter Weather**            | Winter Weather Advisory                                                        |
 | **Frost**                     | Frost Advisory                                                                 |
 | **Freezing Fog**              | Freezing Fog Advisory                                                          |
 | **Freezing Spray**            | Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch                    |
 | **Avalanche**                 | Avalanche Advisory, Avalanche Warning, Avalanche Watch                         |
-| **Extreme Heat**              | Extreme Heat Warning, Extreme Heat Watch                                       |
-| **Heat**                      | Heat Advisory                                                                  |
+| **Heat**                      | Extreme Heat Warning, Extreme Heat Watch, Heat Advisory                        |
 | **Fire**                      | Fire Warning, Fire Weather Watch                                               |
 | **Red Flag**                  | Red Flag Warning                                                               |
 | **Extreme Fire Danger**       | Extreme Fire Danger                                                            |
