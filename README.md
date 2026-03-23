@@ -93,10 +93,8 @@ The categories and the NWS event types they cover:
 | **Freezing Spray**            | Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch                    |
 | **Avalanche**                 | Avalanche Advisory, Avalanche Warning, Avalanche Watch                         |
 | **Heat**                      | Extreme Heat Warning, Extreme Heat Watch, Heat Advisory                        |
-| **Fire**                      | Fire Warning, Fire Weather Watch                                               |
+| **Fire**                      | Ashfall Advisory, Ashfall Warning, Extreme Fire Danger, Fire Warning, Fire Weather Watch |
 | **Red Flag**                  | Red Flag Warning                                                               |
-| **Extreme Fire Danger**       | Extreme Fire Danger                                                            |
-| **Ashfall**                   | Ashfall Advisory, Ashfall Warning                                              |
 | **Volcano**                   | Volcano Warning                                                                |
 | **High Surf**                 | High Surf Advisory, High Surf Warning                                          |
 | **Hazardous Seas**            | Hazardous Seas Warning, Hazardous Seas Watch                                   |

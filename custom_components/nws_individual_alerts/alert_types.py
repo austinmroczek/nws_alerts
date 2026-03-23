@@ -151,18 +151,14 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
 
     # --- Fire ------------------------------------------------------------------
     "Fire": frozenset({
+        "Ashfall Advisory",
+        "Ashfall Warning",
+        "Extreme Fire Danger",
         "Fire Warning",
         "Fire Weather Watch",
     }),
     "Red Flag": frozenset({
         "Red Flag Warning",
-    }),
-    "Extreme Fire Danger": frozenset({
-        "Extreme Fire Danger",
-    }),
-    "Ashfall": frozenset({
-        "Ashfall Advisory",
-        "Ashfall Warning",
     }),
     "Volcano": frozenset({
         "Volcano Warning",
