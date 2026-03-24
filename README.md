@@ -87,14 +87,11 @@ The categories and the NWS event types they cover:
 | **Dense Fog**                 | Dense Fog Advisory                                                             |
 | **Dense Smoke**               | Dense Smoke Advisory                                                           |
 | **Winter Storm**              | Blizzard Warning, Extreme Cold Warning/Watch, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning/Watch, Winter Weather Advisory |
-| **Freeze**                    | Freeze Warning, Freeze Watch                                                   |
-| **Frost**                     | Frost Advisory                                                                 |
 | **Freezing Fog**              | Freezing Fog Advisory                                                          |
 | **Freezing Spray**            | Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch                    |
 | **Avalanche**                 | Avalanche Advisory, Avalanche Warning, Avalanche Watch                         |
 | **Heat**                      | Extreme Heat Warning, Extreme Heat Watch, Heat Advisory                        |
-| **Fire**                      | Ashfall Advisory, Ashfall Warning, Extreme Fire Danger, Fire Warning, Fire Weather Watch |
-| **Red Flag**                  | Red Flag Warning                                                               |
+| **Fire**                      | Ashfall Advisory, Ashfall Warning, Extreme Fire Danger, Fire Warning, Fire Weather Watch, Red Flag Warning |
 | **Volcano**                   | Volcano Warning                                                                |
 | **High Surf**                 | High Surf Advisory, High Surf Warning                                          |
 | **Hazardous Seas**            | Hazardous Seas Warning, Hazardous Seas Watch                                   |
@@ -105,7 +102,7 @@ The categories and the NWS event types they cover:
 | **Marine Weather**            | Marine Weather Statement                                                       |
 | **Air Quality**               | Air Quality Alert                                                              |
 | **Air Stagnation**            | Air Stagnation Advisory                                                        |
-| **Cold Weather**              | Cold Weather Advisory                                                          |
+| **Cold Weather**              | Cold Weather Advisory, Freeze Warning, Freeze Watch, Frost Advisory            |
 | **Low Water**                 | Low Water Advisory                                                             |
 | **Hydrologic**                | Hydrologic Outlook                                                             |
 | **Hazardous Weather**         | Hazardous Weather Outlook                                                      |
