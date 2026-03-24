@@ -12,6 +12,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
+from .alert_types import ALERT_GROUPS, IGNORE_TYPES
 from .const import (
     API_ENDPOINT,
     CONF_GPS_LOC,
@@ -20,6 +21,10 @@ from .const import (
     CONF_TRACKER,
     CONF_ZONE_ID,
     USER_AGENT,
+)
+
+_KNOWN_ALERT_TYPES: frozenset[str] = IGNORE_TYPES | frozenset(
+    event for group in ALERT_GROUPS.values() for event in group
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -174,6 +179,12 @@ async def async_get_alerts(
             tmp_dict["Instruction"] = alert["properties"]["instruction"]
 
             alert_list.append(tmp_dict)
+
+        unknown = {a["Event"] for a in alert_list} - _KNOWN_ALERT_TYPES
+        for event_type in sorted(unknown):
+            _LOGGER.warning(
+                "NWS alert type %r is not mapped to any sensor group", event_type
+            )
 
         alerts["state"] = len(features)
         alerts["alerts"] = alert_list
