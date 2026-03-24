@@ -70,57 +70,27 @@ Each sensor exposes two attributes when active:
 The categories and the NWS event types they cover:
 
 
-| Sensor                        | Alert Types Covered                                                            |
-| ------------------------------- | -------------------------------------------------------------------------------- |
-| **Flash Flood**               | Flash Flood Statement, Flash Flood Warning, Flash Flood Watch                  |
-| **Flood**                     | Flood Advisory, Flood Statement, Flood Warning, Flood Watch                    |
-| **Coastal Flood**             | Coastal Flood Advisory/Statement/Warning/Watch                                 |
-| **Lakeshore Flood**           | Lakeshore Flood Advisory/Statement/Warning/Watch                               |
-| **Storm Surge**               | Storm Surge Warning, Storm Surge Watch                                         |
-| **Tsunami**                   | Tsunami Advisory, Tsunami Warning, Tsunami Watch                               |
-| **Tornado**                   | Tornado Warning, Tornado Watch                                                 |
-| **Hurricane**                 | Hurricane Warning/Watch, Hurricane Force Wind Warning/Watch, Tropical Storm Warning/Watch, Tropical Cyclone Local Statement, Typhoon Warning/Watch |
-| **Storm**                     | Severe Thunderstorm Warning, Severe Thunderstorm Watch, Storm Warning, Storm Watch |
-| **Wind**                      | High Wind Warning/Watch, Extreme Wind Warning, Brisk Wind Advisory, Lake Wind Advisory, Wind Advisory |
-| **Gale**                      | Gale Warning, Gale Watch                                                       |
-| **Dust**                      | Dust Advisory, Blowing Dust Advisory, Blowing Dust Warning, Dust Storm Warning |
-| **Dense Fog**                 | Dense Fog Advisory                                                             |
-| **Dense Smoke**               | Dense Smoke Advisory                                                           |
-| **Winter Storm**              | Blizzard Warning, Extreme Cold Warning/Watch, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning/Watch, Winter Weather Advisory |
-| **Freezing Fog**              | Freezing Fog Advisory                                                          |
-| **Freezing Spray**            | Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch                    |
-| **Avalanche**                 | Avalanche Advisory, Avalanche Warning, Avalanche Watch                         |
-| **Heat**                      | Extreme Heat Warning, Extreme Heat Watch, Heat Advisory                        |
-| **Fire**                      | Ashfall Advisory, Ashfall Warning, Extreme Fire Danger, Fire Warning, Fire Weather Watch, Red Flag Warning |
-| **Volcano**                   | Volcano Warning                                                                |
-| **High Surf**                 | High Surf Advisory, High Surf Warning                                          |
-| **Hazardous Seas**            | Hazardous Seas Warning, Hazardous Seas Watch                                   |
-| **Small Craft**               | Small Craft Advisory                                                           |
-| **Special Marine**            | Special Marine Warning                                                         |
-| **Rip Current**               | Rip Current Statement                                                          |
-| **Beach Hazards**             | Beach Hazards Statement                                                        |
-| **Marine Weather**            | Marine Weather Statement                                                       |
-| **Air Quality**               | Air Quality Alert                                                              |
-| **Air Stagnation**            | Air Stagnation Advisory                                                        |
-| **Cold Weather**              | Cold Weather Advisory, Freeze Warning, Freeze Watch, Frost Advisory            |
-| **Low Water**                 | Low Water Advisory                                                             |
-| **Hydrologic**                | Hydrologic Outlook                                                             |
-| **Hazardous Weather**         | Hazardous Weather Outlook                                                      |
-| **Severe Weather**            | Severe Weather Statement                                                       |
-| **Special Weather**           | Special Weather Statement                                                      |
-| **Earthquake**                | Earthquake Warning                                                             |
-| **Civil Danger**              | Civil Danger Warning                                                           |
-| **Civil Emergency**           | Civil Emergency Message                                                        |
-| **Child Abduction Emergency** | Child Abduction Emergency                                                      |
-| **Evacuation**                | Evacuation Immediate                                                           |
-| **Shelter In Place**          | Shelter In Place Warning                                                       |
-| **Law Enforcement**           | Law Enforcement Warning                                                        |
-| **Local Area Emergency**      | Local Area Emergency                                                           |
-| **Nuclear Power Plant**       | Nuclear Power Plant Warning                                                    |
-| **Radiological Hazard**       | Radiological Hazard Warning                                                    |
-| **Hazardous Materials**       | Hazardous Materials Warning                                                    |
-| **911 Telephone Outage**      | 911 Telephone Outage                                                           |
-| **Blue Alert**                | Blue Alert                                                                     |
+| Sensor | Alert Types Covered |
+| --- | --- |
+| **Flood** | Coastal Flood Advisory/Statement/Warning/Watch, Flash Flood Statement/Warning/Watch, Flood Advisory/Statement/Warning/Watch, Hydrologic Outlook, Lakeshore Flood Advisory/Statement/Warning/Watch |
+| **Tsunami** | Tsunami Advisory, Tsunami Warning, Tsunami Watch |
+| **Tornado** | Tornado Warning, Tornado Watch |
+| **Hurricane** | Hurricane Warning/Watch, Storm Surge Warning/Watch, Tropical Cyclone Local Statement, Tropical Storm Warning/Watch, Typhoon Warning/Watch |
+| **Thunderstorms** | Severe Thunderstorm Warning/Watch, Storm Warning/Watch |
+| **Wind** | Brisk Wind Advisory, Extreme Wind Warning, Gale Warning/Watch, High Wind Warning/Watch, Hurricane Force Wind Warning/Watch, Lake Wind Advisory, Wind Advisory |
+| **Dust** | Blowing Dust Advisory/Warning, Dust Advisory, Dust Storm Warning |
+| **Fog** | Dense Fog Advisory, Freezing Fog Advisory |
+| **Winter Weather** | Avalanche Advisory/Warning/Watch, Blizzard Warning, Extreme Cold Warning/Watch, Freezing Spray Advisory, Heavy Freezing Spray Warning/Watch, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning/Watch, Winter Weather Advisory |
+| **Heat** | Extreme Heat Warning/Watch, Heat Advisory |
+| **Wildfire** | Ashfall Advisory/Warning, Extreme Fire Danger, Fire Warning, Fire Weather Watch, Red Flag Warning |
+| **Volcano** | Volcano Warning |
+| **Beach Hazards** | Beach Hazards Statement, High Surf Advisory/Warning, Rip Current Statement |
+| **Marine** | Hazardous Seas Warning/Watch, Low Water Advisory, Marine Weather Statement, Small Craft Advisory, Special Marine Warning |
+| **Air Quality** | Air Quality Alert, Air Stagnation Advisory, Dense Smoke Advisory |
+| **Cold** | Cold Weather Advisory, Freeze Warning/Watch, Frost Advisory |
+| **Weather** | Hazardous Weather Outlook, Severe Weather Statement, Special Weather Statement |
+| **Earthquake** | Earthquake Warning |
+| **Other Hazards** | 911 Telephone Outage, Blue Alert, Child Abduction Emergency, Civil Danger Warning, Civil Emergency Message, Evacuation Immediate, Hazardous Materials Warning, Law Enforcement Warning, Local Area Emergency, Nuclear Power Plant Warning, Radiological Hazard Warning, Shelter In Place Warning |
 
 The full list of NWS alert event types is available at: [https://api.weather.gov/alerts/types](https://api.weather.gov/alerts/types)
 

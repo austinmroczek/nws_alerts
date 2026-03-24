@@ -24,41 +24,29 @@ IGNORE_TYPES: frozenset[str] = frozenset({
 # ---------------------------------------------------------------------------
 ALERT_GROUPS: dict[str, frozenset[str]] = {
 
-    # --- Flood -----------------------------------------------------------------
-    "Flash Flood": frozenset({
-        "Flash Flood Statement",
-        "Flash Flood Warning",
-        "Flash Flood Watch",
-    }),
     "Flood": frozenset({
-        "Flood Advisory",
-        "Flood Statement",
-        "Flood Warning",
-        "Flood Watch",
-    }),
-    "Coastal Flood": frozenset({
         "Coastal Flood Advisory",
         "Coastal Flood Statement",
         "Coastal Flood Warning",
         "Coastal Flood Watch",
-    }),
-    "Lakeshore Flood": frozenset({
+        "Flash Flood Statement",
+        "Flash Flood Warning",
+        "Flash Flood Watch",
+        "Flood Advisory",
+        "Flood Statement",
+        "Flood Warning",
+        "Flood Watch",
+        "Hydrologic Outlook",
         "Lakeshore Flood Advisory",
         "Lakeshore Flood Statement",
         "Lakeshore Flood Warning",
         "Lakeshore Flood Watch",
-    }),
-    "Storm Surge": frozenset({
-        "Storm Surge Warning",
-        "Storm Surge Watch",
     }),
     "Tsunami": frozenset({
         "Tsunami Advisory",
         "Tsunami Warning",
         "Tsunami Watch",
     }),
-
-    # --- Storm -----------------------------------------------------------------
     "Tornado": frozenset({
         "Tornado Warning",
         "Tornado Watch",
@@ -66,54 +54,52 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     "Hurricane": frozenset({
         "Hurricane Warning",
         "Hurricane Watch",
-        "Hurricane Force Wind Warning",
-        "Hurricane Force Wind Watch",
+        "Storm Surge Warning",
+        "Storm Surge Watch",
         "Tropical Cyclone Local Statement",
         "Tropical Storm Warning",
         "Tropical Storm Watch",
         "Typhoon Warning",
         "Typhoon Watch",
     }),
-    "Storm": frozenset({
+    "Thunderstorms": frozenset({
         "Severe Thunderstorm Warning",
         "Severe Thunderstorm Watch",
         "Storm Warning",
         "Storm Watch",
     }),
-
-    # --- Wind ------------------------------------------------------------------
     "Wind": frozenset({
         "Brisk Wind Advisory",
         "Extreme Wind Warning",
+        "Gale Warning",
+        "Gale Watch",
         "High Wind Warning",
         "High Wind Watch",
+        "Hurricane Force Wind Warning",
+        "Hurricane Force Wind Watch",
         "Lake Wind Advisory",
         "Wind Advisory",
     }),
-    "Gale": frozenset({
-        "Gale Warning",
-        "Gale Watch",
-    }),
-
-    # --- Dust / Visibility -----------------------------------------------------
     "Dust": frozenset({
         "Blowing Dust Advisory",
         "Blowing Dust Warning",
         "Dust Advisory",
         "Dust Storm Warning",
     }),
-    "Dense Fog": frozenset({
+    "Fog": frozenset({
         "Dense Fog Advisory",
+        "Freezing Fog Advisory",
     }),
-    "Dense Smoke": frozenset({
-        "Dense Smoke Advisory",
-    }),
-
-    # --- Winter / Ice ----------------------------------------------------------
-    "Winter Storm": frozenset({
+    "Winter Weather": frozenset({
+        "Avalanche Advisory",
+        "Avalanche Warning",
+        "Avalanche Watch",
         "Blizzard Warning",
         "Extreme Cold Warning",
         "Extreme Cold Watch",
+        "Freezing Spray Advisory",
+        "Heavy Freezing Spray Warning",
+        "Heavy Freezing Spray Watch",
         "Ice Storm Warning",
         "Lake Effect Snow Warning",
         "Snow Squall Warning",
@@ -121,29 +107,12 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
         "Winter Storm Watch",
         "Winter Weather Advisory",
     }),
-    "Freezing Fog": frozenset({
-        "Freezing Fog Advisory",
-    }),
-    "Freezing Spray": frozenset({
-        "Freezing Spray Advisory",
-        "Heavy Freezing Spray Warning",
-        "Heavy Freezing Spray Watch",
-    }),
-    "Avalanche": frozenset({
-        "Avalanche Advisory",
-        "Avalanche Warning",
-        "Avalanche Watch",
-    }),
-
-    # --- Heat ------------------------------------------------------------------
     "Heat": frozenset({
         "Extreme Heat Warning",
         "Extreme Heat Watch",
         "Heat Advisory",
     }),
-
-    # --- Fire ------------------------------------------------------------------
-    "Fire": frozenset({
+    "Wildfire": frozenset({
         "Ashfall Advisory",
         "Ashfall Warning",
         "Extreme Fire Danger",
@@ -154,99 +123,53 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     "Volcano": frozenset({
         "Volcano Warning",
     }),
-
-    # --- Marine ----------------------------------------------------------------
-    "High Surf": frozenset({
-        "High Surf Advisory",
-        "High Surf Warning",
-    }),
-    "Hazardous Seas": frozenset({
-        "Hazardous Seas Warning",
-        "Hazardous Seas Watch",
-    }),
-    "Small Craft": frozenset({
-        "Small Craft Advisory",
-    }),
-    "Special Marine": frozenset({
-        "Special Marine Warning",
-    }),
-    "Rip Current": frozenset({
-        "Rip Current Statement",
-    }),
     "Beach Hazards": frozenset({
         "Beach Hazards Statement",
+        "High Surf Advisory",
+        "High Surf Warning",
+        "Rip Current Statement",
     }),
-    "Marine Weather": frozenset({
+    "Marine": frozenset({
+        "Hazardous Seas Warning",
+        "Hazardous Seas Watch",
+        "Low Water Advisory",
         "Marine Weather Statement",
+        "Small Craft Advisory",
+        "Special Marine Warning",
     }),
-
-    # --- General Weather -------------------------------------------------------
     "Air Quality": frozenset({
         "Air Quality Alert",
-    }),
-    "Air Stagnation": frozenset({
         "Air Stagnation Advisory",
+        "Dense Smoke Advisory",
     }),
-    "Cold Weather": frozenset({
+    "Cold": frozenset({
         "Cold Weather Advisory",
         "Freeze Warning",
         "Freeze Watch",
         "Frost Advisory",
     }),
-    "Low Water": frozenset({
-        "Low Water Advisory",
-    }),
-    "Hydrologic": frozenset({
-        "Hydrologic Outlook",
-    }),
-    "Hazardous Weather": frozenset({
+    "Weather": frozenset({
         "Hazardous Weather Outlook",
-    }),
-    "Severe Weather": frozenset({
         "Severe Weather Statement",
-    }),
-    "Special Weather": frozenset({
         "Special Weather Statement",
     }),
-
-    # --- Life-Safety / Non-Weather Emergencies ---------------------------------
     "Earthquake": frozenset({
         "Earthquake Warning",
     }),
-    "Civil Danger": frozenset({
-        "Civil Danger Warning",
-    }),
-    "Civil Emergency": frozenset({
-        "Civil Emergency Message",
-    }),
-    "Child Abduction Emergency": frozenset({
-        "Child Abduction Emergency",
-    }),
-    "Evacuation": frozenset({
-        "Evacuation Immediate",
-    }),
-    "Shelter In Place": frozenset({
-        "Shelter In Place Warning",
-    }),
-    "Law Enforcement": frozenset({
-        "Law Enforcement Warning",
-    }),
-    "Local Area Emergency": frozenset({
-        "Local Area Emergency",
-    }),
-    "Nuclear Power Plant": frozenset({
-        "Nuclear Power Plant Warning",
-    }),
-    "Radiological Hazard": frozenset({
-        "Radiological Hazard Warning",
-    }),
-    "Hazardous Materials": frozenset({
-        "Hazardous Materials Warning",
-    }),
-    "911 Telephone Outage": frozenset({
+
+    # --- Life-Safety / Non-Weather Emergencies ---------------------------------
+    "Other Hazards": frozenset({
         "911 Telephone Outage",
-    }),
-    "Blue Alert": frozenset({
         "Blue Alert",
+        "Child Abduction Emergency",
+        "Civil Danger Warning",
+        "Civil Emergency Message",
+        "Evacuation Immediate",
+        "Hazardous Materials Warning",
+        "Law Enforcement Warning",
+        "Local Area Emergency",
+        "Nuclear Power Plant Warning",
+        "Radiological Hazard Warning",
+        "Shelter In Place Warning",
     }),
 }
