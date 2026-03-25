@@ -9,7 +9,7 @@ from datetime import timedelta
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
 
 from .alert_types import ALERT_GROUPS, IGNORE_TYPES
@@ -52,15 +52,20 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
         async with asyncio.timeout(self.timeout):
             try:
                 data = await async_get_state(self.hass, self.config, coords)
-            except AttributeError:
-                _LOGGER.debug(
-                    "Error fetching most recent data from NWS Alerts API; will continue trying"
+            except Exception as error:
+                _LOGGER.warning(
+                    "Error fetching NWS Alerts data, keeping last known state: %s", error
                 )
                 return self.data
-            except Exception as error:
-                raise UpdateFailed(error) from error
-            _LOGGER.debug("Data: %s", data)
-            return data
+
+        if not data or "alerts" not in data:
+            _LOGGER.warning(
+                "NWS Alerts API returned empty or incomplete data, keeping last known state"
+            )
+            return self.data
+
+        _LOGGER.debug("Data: %s", data)
+        return data
 
     async def _get_tracker_gps(self):
         """Return device tracker GPS data."""
