@@ -122,7 +122,17 @@ class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
     _attr_attribution = ATTRIBUTION
     _attr_device_class = SensorDeviceClass.ENUM
     _attr_options = ["none", "advisory", "watch", "warning"]
-    _attr_icon = "mdi:alert"
+
+    _STATE_ICONS: dict[str, str] = {
+        "advisory": "mdi:information",
+        "watch":    "mdi:eye",
+        "warning":  "mdi:alert",
+    }
+
+    @property
+    def icon(self) -> str:
+        """Return an icon reflecting the current severity level."""
+        return self._STATE_ICONS.get(self.native_value, "mdi:check-circle-outline")
 
     def __init__(
         self,
