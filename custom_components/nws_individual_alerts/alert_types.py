@@ -89,6 +89,7 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
     "Fog": frozenset({
         "Dense Fog Advisory",
         "Freezing Fog Advisory",
+        "Ice Fog Advisory",
     }),
     "Winter Weather": frozenset({
         "Avalanche Advisory",
