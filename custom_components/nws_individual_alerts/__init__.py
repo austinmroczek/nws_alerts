@@ -1,4 +1,6 @@
-""" NWS Alerts """
+"""NWS Individual Alerts"""
+
+from __future__ import annotations
 
 import logging
 
@@ -47,8 +49,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     coordinator = AlertsDataUpdateCoordinator(
         hass,
         config_entry.data,
-        config_entry.data.get(CONF_TIMEOUT),
-        config_entry.data.get(CONF_INTERVAL),
+        config_entry.data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT),
+        config_entry.data.get(CONF_INTERVAL, DEFAULT_INTERVAL),
     )
 
     # Fetch initial data so we have data when entities subscribe

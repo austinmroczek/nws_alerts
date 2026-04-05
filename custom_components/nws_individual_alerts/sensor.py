@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import Final
 
@@ -86,7 +88,7 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{slugify(f'{entry.data[CONF_NAME]} {sensor_description.name}')}_{entry.entry_id}"
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         if self.coordinator.data is None:
             return None
@@ -95,7 +97,7 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
         return None
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> dict:
         """Return the state attributes."""
         attrs = {}
         if self.coordinator.data is None:
