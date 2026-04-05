@@ -6,6 +6,7 @@
   "documentation": "https://github.com/austinmroczek/nws_alerts/",
   "dependencies": [],
   "homeassistant": "2024.1.0",
+  "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/austinmroczek/nws_alerts/issues",
   "requirements": [],

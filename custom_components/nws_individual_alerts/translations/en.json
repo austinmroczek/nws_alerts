@@ -44,6 +44,31 @@
       }
     }
   },
+  "entity": {
+    "sensor": {
+      "alert_count": { "name": "Alert Count" },
+      "last_updated": { "name": "Last Updated" },
+      "flood": { "name": "Flood" },
+      "tsunami": { "name": "Tsunami" },
+      "tornado": { "name": "Tornado" },
+      "hurricane": { "name": "Hurricane" },
+      "thunderstorms": { "name": "Thunderstorms" },
+      "wind": { "name": "Wind" },
+      "dust": { "name": "Dust" },
+      "fog": { "name": "Fog" },
+      "winter_weather": { "name": "Winter Weather" },
+      "heat": { "name": "Heat" },
+      "wildfire": { "name": "Wildfire" },
+      "volcano": { "name": "Volcano" },
+      "beach_hazards": { "name": "Beach Hazards" },
+      "marine": { "name": "Marine" },
+      "air_quality": { "name": "Air Quality" },
+      "cold": { "name": "Cold" },
+      "weather": { "name": "Weather" },
+      "earthquake": { "name": "Earthquake" },
+      "other_hazards": { "name": "Other Hazards" }
+    }
+  },
   "options": {
     "step": {
       "user": {

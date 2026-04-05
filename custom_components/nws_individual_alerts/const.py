@@ -2,7 +2,7 @@ from homeassistant.const import Platform
 
 # API
 API_ENDPOINT = "https://api.weather.gov"
-USER_AGENT = "Home Assistant"
+USER_AGENT = "github.com/austinmroczek/nws_alerts"
 
 # Config
 CONF_TIMEOUT = "timeout"
@@ -17,7 +17,7 @@ DEFAULT_INTERVAL = 1
 DEFAULT_TIMEOUT = 120
 
 # Misc
-VERSION = "2.7"
+VERSION = "6.1"
 ISSUE_URL = "https://github.com/austinmroczek/nws_alerts/issues"
 DOMAIN = "nws_individual_alerts"
 ATTRIBUTION = "Data provided by Weather.gov"

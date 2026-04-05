@@ -1,0 +1,83 @@
+rules:
+  # ── Bronze ──────────────────────────────────────────────────────────────────
+  action-setup:
+    status: exempt
+    comment: This integration does not register any service actions.
+  appropriate-polling: done
+  brands: todo
+  common-modules: done
+  config-flow: done
+  config-flow-test-coverage: done
+  dependency-transparency: done
+  docs-actions:
+    status: exempt
+    comment: This integration does not provide any service actions.
+  docs-high-level-description: done
+  docs-installation-instructions: done
+  docs-removal-instructions: todo
+  entity-event-setup:
+    status: exempt
+    comment: Entities use CoordinatorEntity and do not subscribe to events directly.
+  entity-unique-id: done
+  has-entity-name: done
+  icon: done
+  log-when-unavailable: done
+  parallel-updates: done
+  reauthentication-flow:
+    status: exempt
+    comment: The NWS API requires no authentication.
+  test-before-configure: todo
+  test-before-setup: done
+  unique-config-entry: todo
+
+  # ── Silver ───────────────────────────────────────────────────────────────────
+  action-exceptions:
+    status: exempt
+    comment: This integration does not register any service actions.
+  config-entry-unloading: done
+  docs-configuration-parameters: done
+  docs-installation-parameters: done
+  entity-unavailable: done
+  integration-owner: done
+  log-when-unavailable: done
+  reconfiguration-flow: todo
+  repair-issues:
+    status: exempt
+    comment: No user-actionable repair issues are applicable.
+  stale-devices:
+    status: exempt
+    comment: This is a service-type integration; it does not manage physical devices.
+
+  # ── Gold ─────────────────────────────────────────────────────────────────────
+  devices: done
+  diagnostics: todo
+  discovery: todo
+  discovery-update-info: todo
+  docs-data-update: todo
+  docs-examples: done
+  docs-known-limitations: todo
+  docs-supported-devices:
+    status: exempt
+    comment: Cloud service integration; no physical devices.
+  docs-supported-functions: done
+  docs-troubleshooting: todo
+  docs-unsupported-models:
+    status: exempt
+    comment: Cloud service integration; no physical devices.
+  dynamic-devices:
+    status: exempt
+    comment: Sensors are statically defined, not discovered per-device.
+  entity-category: done
+  entity-device-class: done
+  entity-disabled-by-default: todo
+  entity-translations: done
+  exception-translations: todo
+  icon-translations: todo
+  reconfiguration-flow: todo
+  repair-issues: todo
+  test-coverage: done
+
+  # ── Platinum ──────────────────────────────────────────────────────────────────
+  async-dependency: done
+  inject-websession: todo
+  strict-typing: todo

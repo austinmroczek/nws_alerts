@@ -10,8 +10,8 @@ from tests.const import CONFIG_DATA, CONFIG_DATA_3
 pytestmark = pytest.mark.asyncio
 
 # Entity IDs use pattern: sensor.{device_name}_{entity_name} (slugified)
-# Device name is "NWS Alerts", so prefix is "nws_alerts"
-MAIN_SENSOR = "sensor.nws_alerts_alerts"
+# Device name comes from the config entry title ("NWS Alerts" in tests)
+MAIN_SENSOR = "sensor.nws_alerts_alert_count"
 LAST_UPDATED_SENSOR = "sensor.nws_alerts_last_updated"
 
 # Category sensors — fixture has Excessive Heat Warning + Air Quality Alert
@@ -136,12 +136,12 @@ async def test_category_sensor_active_alerts_attribute(hass, mock_api):
     assert state.attributes["alerts"][0]["Event"] == "Excessive Heat Warning"
 
 
-async def test_category_sensor_inactive_has_no_attributes(hass, mock_api):
-    """Inactive category sensor has no active_alerts or alerts attributes."""
+async def test_category_sensor_inactive_has_empty_attributes(hass, mock_api):
+    """Inactive category sensor always exposes active_alerts and alerts as empty lists."""
     await _setup_entry(hass)
     state = hass.states.get(FLOOD_SENSOR)
-    assert "active_alerts" not in state.attributes
-    assert "alerts" not in state.attributes
+    assert state.attributes["active_alerts"] == []
+    assert state.attributes["alerts"] == []
 
 
 async def test_category_sensor_watch_level(hass, mock_api_tornado):

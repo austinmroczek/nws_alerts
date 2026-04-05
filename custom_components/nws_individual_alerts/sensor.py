@@ -3,9 +3,14 @@ from __future__ import annotations
 import logging
 from typing import Final
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_NAME, EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -16,12 +21,20 @@ from .alert_types import ALERT_GROUPS
 from .const import ATTRIBUTION, COORDINATOR, DOMAIN
 
 SENSOR_TYPES: Final[dict[str, SensorEntityDescription]] = {
-    "state": SensorEntityDescription(key="state", name="Alerts", icon="mdi:alert"),
+    "state": SensorEntityDescription(
+        key="state",
+        name="Alert Count",
+        translation_key="alert_count",
+        icon="mdi:alert",
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
     "last_updated": SensorEntityDescription(
-        name="Last Updated",
         key="last_updated",
+        name="Last Updated",
+        translation_key="last_updated",
         icon="mdi:update",
         device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 }
 
@@ -64,6 +77,16 @@ async def async_setup_entry(
     async_add_entities(sensors, False)
 
 
+def _device_info(entry: ConfigEntry) -> DeviceInfo:
+    """Return device registry information shared by all sensors for this entry."""
+    return DeviceInfo(
+        entry_type=DeviceEntryType.SERVICE,
+        identifiers={(DOMAIN, entry.entry_id)},
+        manufacturer="NWS",
+        name=entry.title,
+    )
+
+
 class NWSAlertSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
@@ -83,7 +106,10 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
 
         self._attr_icon = sensor_description.icon
         self._attr_name = sensor_description.name
+        self._attr_translation_key = sensor_description.translation_key
         self._attr_device_class = sensor_description.device_class
+        self._attr_state_class = sensor_description.state_class
+        self._attr_entity_category = sensor_description.entity_category
         # Preserve the pre-existing unique_id format for backwards compatibility
         self._attr_unique_id = f"{slugify(f'{entry.data[CONF_NAME]} {sensor_description.name}')}_{entry.entry_id}"
 
@@ -109,12 +135,7 @@ class NWSAlertSensor(CoordinatorEntity, SensorEntity):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device registry information."""
-        return DeviceInfo(
-            entry_type=DeviceEntryType.SERVICE,
-            identifiers={(DOMAIN, self._config.entry_id)},
-            manufacturer="NWS",
-            name="NWS Alerts",
-        )
+        return _device_info(self._config)
 
 
 class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
@@ -148,11 +169,12 @@ class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
         self._config = entry
         self._alert_types = alert_types
         self._attr_name = name
+        self._attr_translation_key = slugify(name)
         self._attr_unique_id = f"{slugify(name)}_{entry.entry_id}"
 
     @property
-    def native_value(self) -> str | None:
-        """Return the highest active severity level, or None if no alerts are active."""
+    def native_value(self) -> str:
+        """Return the highest active severity level."""
         if self.coordinator.data is None or "alerts" not in self.coordinator.data:
             return "none"
         active = [
@@ -165,15 +187,13 @@ class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict:
-        """Return the active alert event names and their full details."""
+        """Return active alert event names and full details. Always present for template consistency."""
         if self.coordinator.data is None or "alerts" not in self.coordinator.data:
-            return {}
+            return {"active_alerts": [], "alerts": []}
         active = [
             alert for alert in self.coordinator.data["alerts"]
             if alert["Event"] in self._alert_types
         ]
-        if not active:
-            return {}
         return {
             "active_alerts": [alert["Event"] for alert in active],
             "alerts": active,
@@ -182,9 +202,4 @@ class NWSAlertGroupSensor(CoordinatorEntity, SensorEntity):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device registry information."""
-        return DeviceInfo(
-            entry_type=DeviceEntryType.SERVICE,
-            identifiers={(DOMAIN, self._config.entry_id)},
-            manufacturer="NWS",
-            name="NWS Alerts",
-        )
+        return _device_info(self._config)

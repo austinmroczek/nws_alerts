@@ -20,9 +20,9 @@ binary_sensor:
       nws_alerts_are_active:
         friendly_name: NWS Alerts Are Active
         value_template: >
-          {{ states('sensor.nws_alerts_alerts') | int(0) > 0 }}
+          {{ states('sensor.nws_alerts_alert_count') | int(0) > 0 }}
         icon_template: >-
-          {% if states('sensor.nws_alerts_alerts') | int(0) > 0 %}
+          {% if states('sensor.nws_alerts_alert_count') | int(0) > 0 %}
             mdi:weather-lightning
           {% else %}
             mdi:weather-sunny
@@ -37,10 +37,10 @@ automation:
     id: nws_mobile_app_notifications
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
     condition:
       - condition: numeric_state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
         above: 0
     action:
       - repeat:
@@ -66,10 +66,10 @@ automation:
     id: nws_persistent_notifications
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
     condition: 
       - condition: numeric_state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
         above: 0
     action:
       - repeat:
@@ -99,10 +99,10 @@ automation:
     description: ""
     trigger:
       - platform: state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
     condition:
       - condition: numeric_state
-        entity_id: sensor.nws_alerts_alerts
+        entity_id: sensor.nws_alerts_alert_count
         above: 0
     action:
       - repeat:
@@ -142,7 +142,7 @@ script:
     alias: NWS Alerts Persistent Notifications
     sequence:
       - service: >
-          {% if states('sensor.nws_alerts_alerts') != '0' %}
+          {% if states('sensor.nws_alerts_alert_count') != '0' %}
             persistent_notification.create
           {% endif %}
         data:

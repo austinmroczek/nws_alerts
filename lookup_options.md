@@ -1,17 +1,30 @@
 # NWS Alert Lookup Options
-The National Weather Service (NWS) provides different methods to query weather alerts and warnings: county/zone-based alert lookup and GPS point-based alert lookup. In the NWS Alert Intergration, County and Zone configurations are grouped. Overall, County, Zone, and Coordinate location alert lookup each has strengths and limitations. The choice between the methods depends on the user's location, the complexity of the local weather patterns, and the level of detail and precision required for the specific situation.
 
-## Coordinate (most precise)
-The point-based alert lookup uses the user's precise location (based on submitted coordinates) to query weather alerts for your specific location. This method provides more accurate and targeted information, particularly useful for users who live or work in areas with microclimates or complex topography. <b>However, this method may delay awareness of severe weather developing in the user's region.</b>
+The NWS Individual Alerts integration supports three methods for querying weather alerts from the National Weather Service API. Each has different trade-offs around precision and coverage.
 
-**NOTE: The NWS Alerts integration will use both of the following methods (both County and Zone) if you select the "Zone ID" lookup method in the integration configuration.
+## GPS Location (recommended)
 
-## County (least precise)
-The county-based alert lookup relies on geographic boundaries defined by county lines. The NWS issues weather alerts based on the weather conditions within each county. While counties are well-defined and familiar to most, they may not be precise enough for areas with complex topography or microclimates. In such places, weather conditions can vary significantly from one location to another, even within the same county. For example, a county may be mostly flat but have a mountainous region that experiences different weather conditions. Therefore, relying on county-based alerts alone may not provide enough detail for some users. 
+GPS-based lookup uses a latitude/longitude coordinate to query the NWS `/alerts/active?point=` endpoint. The NWS determines which zones contain that point and returns only the alerts that affect your precise location.
 
-## Zone (recommended method)
-The zone-based alert lookup, relies on geographic boundaries defined by the NWS based on weather patterns and conditions. Zones can vary in size and shape and are often used in areas with complex topography or microclimates where weather conditions can differ significantly over short distances. By defining zones based on weather patterns, the NWS can issue more targeted and precise alerts that consider each zone's unique conditions. <b>Zone-based queries are the recommended method for most users.</b>
+**This is the recommended method for most users.** It provides the most accurate results and avoids alerts that technically cover your county or zone but don't affect your specific location.
 
-## Source:
+The integration offers two GPS sub-options:
+
+- **Home Assistant location** — uses the latitude/longitude configured in your Home Assistant instance (Settings → System → General)
+- **Device Tracker** — uses the GPS coordinates reported by a Home Assistant device tracker entity. Useful if you want alerts that follow a person or vehicle.
+
+## Zone ID
+
+Zone ID lookup uses one or more NWS zone or county codes (e.g. `OHC049` or `OHZ033,OHZ034`) to query the NWS `/alerts/active?zone=` endpoint. Both county and public zone codes are accepted and can be mixed.
+
+Zones cover a broader geographic area than a single point, so this method may return alerts that do not affect your exact location. It is useful when:
+
+- GPS coordinates are not available or not appropriate
+- You intentionally want broader coverage (e.g. monitoring an entire county)
+
+To find your zone code: go to [alerts.weather.gov](https://alerts.weather.gov/), click "Land areas with zones", scroll to your state, then click "public zones" or "county zones". Separate multiple codes with commas.
+
+## Sources
+
 - https://www.weather.gov/media/documentation/docs/NWS_Geolocation.pdf
 - https://www.weather.gov/gis/PublicZones
