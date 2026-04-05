@@ -1,16 +1,11 @@
-# Alerts from the US National Weather Service  (nws_individual_alerts)
+# NWS Individual Alerts
 
-An updated version of the nws_alerts custom integration for Home Assistant originally found at github.com/eracknaphobia/nws_custom_component, and then upgraded  at https://github.com/finity69x2/nws_alerts
+A Home Assistant custom integration that retrieves active weather alerts from the US National Weather Service API and exposes them as sensors for use in automation and dashboards.
 
-This integration retrieves updated weather alerts every minute from the US NWS API (by default but it can be changed in the config options).
-
-You can configure the integration to use your NWS Zone, your precise location via GPS coordinates or you can get dynamic location alerts by configuring the integration to use a device_tracker entity from HA as long as that device tracker provides GPS coordinates.
-
-The integration presents the number of currently active alerts as the state of the main sensor and lists full alert details as a list in its attributes. It also creates one sensor per alert category that reports the highest active severity level (`advisory`, `watch`, or `warning`) for that category.
-
-The sensor that is created is used in my "NWS Alerts" package: https://github.com/finity69x2/nws_alerts/blob/master/packages/nws_alerts_package.yaml
-
-You can also display the generated alerts in your frontend. For example usage see: https://github.com/finity69x2/nws_alerts/blob/master/lovelace/alerts_tab.yaml
+- Polls the NWS API every minute (configurable)
+- Creates a main sensor with the count of active alerts and full alert details as attributes
+- Creates one sensor per alert category reporting the highest active severity level (`none`, `advisory`, `watch`, or `warning`)
+- Supports lookup by NWS Zone ID, GPS coordinates, or a Home Assistant device tracker
 
 ## Installation
 
@@ -28,27 +23,51 @@ You can also display the generated alerts in your frontend. For example usage se
 
 After restarting, configure the integration using the instructions in the following section.
 
-## Configuration:
+## Configuration
 
-<b>NOTE: As of HA versoin 2024.5.x the yaml configuration option is broken. I don't know if it will ever be fixed so the only viable config option is via the UI</b>
+Go to **Settings → Devices & Services**, click **+ Add Integration**, search for **NWS Individual Alerts**, and follow the prompts.
 
-<b>You can configure the integration via the "Configuration->Integrations" section of the Home Assistant UI:</b>
+### Lookup methods
 
-Click on "+ Add Integration" buuton in the bottom right corner.
+Choose the method that best fits your situation:
 
-Search for "NWS Alerts" in the list of integrations and follow the UI prompts to configure the sensor.
+**Zone ID** — Enter one or more NWS zone or county codes (e.g. `OHC049` or `OHZ033,OHZ034`). This is the most reliable option and matches how NWS issues alerts — each alert targets specific zones, so a zone lookup will never miss an alert for your area. Best choice for a fixed location.
 
-You can find your Zone or County ID by going to https://alerts.weather.gov/, click on "Land areas with zones", scroll down to your state, then click on either "public zones" or "county zones". Then scroll to find your location (county) from the list(s). The desired zone or county code (depending on which link you used) will be listed above the location
+To find your zone code: go to [alerts.weather.gov](https://alerts.weather.gov/), click "Land areas with zones", scroll to your state, then click "public zones" or "county zones". Your code is listed above the location name. Separate multiple zones with commas.
 
-There are a few configuration method options to select from.
+**GPS Coordinates** — Uses your Home Assistant latitude/longitude to query alerts for your precise location. The NWS API finds all zones that contain that point and returns their active alerts. Useful if you want alerts scoped to a specific address rather than a broader zone.
 
-Please see the following link to help you decide which option to use:
+**Device Tracker** — Uses the GPS coordinates reported by a Home Assistant device tracker entity. The integration queries the NWS API using wherever the device is currently located. Use this if you want alerts that follow a person or vehicle.
 
-https://github.com/finity69x2/nws_alerts/blob/master/lookup_options.md
+After saving, the integration creates sensors under the name you entered as the Friendly Name during setup.
 
-If you select the "Using a device tracker" option under the "GPS Location" option then HA will use the GPS coordinates provided by that tracker to query for alerts so you should follow the same recommendations for using GPS coordinates when using that option.
+## Main Sensor
 
-After you restart Home Assistant then you should have a new sensor (by default) called "sensor.nws_individual_alerts" in your system.
+The main sensor's state is the **count of currently active alerts**. It is named after the Friendly Name you entered during setup (e.g. if you named it "Home", the sensor is `sensor.home_alerts`).
+
+It exposes one attribute:
+
+**`Alerts`** — a list of all active alerts, each with the following fields:
+
+| Field | Description |
+| --- | --- |
+| `Event` | NWS event type name (e.g. `Tornado Warning`) |
+| `Headline` | Short headline for the alert |
+| `ID` | Stable UUID derived from the NWS alert ID |
+| `URL` | Direct URL to the alert on api.weather.gov |
+| `Type` | Message type (`Alert`, `Update`, or `Cancel`) |
+| `Status` | Alert status (`Actual`, `Test`, etc.) |
+| `Severity` | NWS severity (`Extreme`, `Severe`, `Moderate`, `Minor`, `Unknown`) |
+| `Certainty` | NWS certainty (`Observed`, `Likely`, `Possible`, `Unlikely`, `Unknown`) |
+| `Sent` | ISO timestamp when the alert was issued |
+| `Onset` | ISO timestamp when the hazard is expected to begin |
+| `Expires` | ISO timestamp when the alert expires |
+| `Ends` | ISO timestamp when the hazard is expected to end (may be null) |
+| `AreasAffected` | Free-text description of the affected areas |
+| `Description` | Full alert text |
+| `Instruction` | Recommended safety actions (may be null) |
+
+A second sensor named `<friendly_name> Last Updated` reports the timestamp of the most recent successful API fetch.
 
 ## Alert Category Sensors
 
@@ -70,29 +89,72 @@ Each sensor exposes two attributes when active:
 The categories and the NWS event types they cover:
 
 
-| Sensor | Advisory | Watch | Warning |
-| --- | --- | --- | --- |
-| **Flood** | Coastal Flood Advisory, Coastal Flood Statement, Flash Flood Statement, Flood Advisory, Flood Statement, Hydrologic Outlook, Lakeshore Flood Advisory, Lakeshore Flood Statement | Coastal Flood Watch, Flash Flood Watch, Flood Watch, Lakeshore Flood Watch | Coastal Flood Warning, Flash Flood Warning, Flood Warning, Lakeshore Flood Warning |
-| **Tsunami** | Tsunami Advisory | Tsunami Watch | Tsunami Warning |
-| **Tornado** | — | Tornado Watch | Tornado Warning |
-| **Hurricane** | Tropical Cyclone Local Statement | Hurricane Watch, Storm Surge Watch, Tropical Storm Watch, Typhoon Watch | Hurricane Warning, Storm Surge Warning, Tropical Storm Warning, Typhoon Warning |
-| **Thunderstorms** | — | Severe Thunderstorm Watch, Storm Watch | Severe Thunderstorm Warning, Storm Warning |
-| **Wind** | Brisk Wind Advisory, Lake Wind Advisory, Wind Advisory | Gale Watch, High Wind Watch, Hurricane Force Wind Watch | Extreme Wind Warning, Gale Warning, High Wind Warning, Hurricane Force Wind Warning |
-| **Dust** | Blowing Dust Advisory, Dust Advisory | — | Blowing Dust Warning, Dust Storm Warning |
-| **Fog** | Dense Fog Advisory, Freezing Fog Advisory | — | — |
-| **Winter Weather** | Avalanche Advisory, Freezing Spray Advisory, Winter Weather Advisory | Avalanche Watch, Extreme Cold Watch, Heavy Freezing Spray Watch, Winter Storm Watch | Avalanche Warning, Blizzard Warning, Extreme Cold Warning, Heavy Freezing Spray Warning, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning |
-| **Heat** | Heat Advisory | Extreme Heat Watch | Extreme Heat Warning |
-| **Wildfire** | Ashfall Advisory, Extreme Fire Danger | Fire Weather Watch | Ashfall Warning, Fire Warning, Red Flag Warning |
-| **Volcano** | — | — | Volcano Warning |
-| **Beach Hazards** | Beach Hazards Statement, High Surf Advisory, Rip Current Statement | — | High Surf Warning |
-| **Marine** | Low Water Advisory, Marine Weather Statement, Small Craft Advisory | Hazardous Seas Watch | Hazardous Seas Warning, Special Marine Warning |
-| **Air Quality** | Air Quality Alert, Air Stagnation Advisory, Dense Smoke Advisory | — | — |
-| **Cold** | Cold Weather Advisory, Frost Advisory | Freeze Watch | Freeze Warning |
-| **Weather** | Hazardous Weather Outlook, Severe Weather Statement, Special Weather Statement | — | — |
-| **Earthquake** | — | — | Earthquake Warning |
-| **Other Hazards** | 911 Telephone Outage, Blue Alert, Child Abduction Emergency, Civil Emergency Message, Evacuation Immediate, Local Area Emergency | — | Civil Danger Warning, Hazardous Materials Warning, Law Enforcement Warning, Nuclear Power Plant Warning, Radiological Hazard Warning, Shelter In Place Warning |
+| Sensor             | Advisory                                                                                                                                                                         | Watch                                                                               | Warning                                                                                                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Flood**          | Coastal Flood Advisory, Coastal Flood Statement, Flash Flood Statement, Flood Advisory, Flood Statement, Hydrologic Outlook, Lakeshore Flood Advisory, Lakeshore Flood Statement | Coastal Flood Watch, Flash Flood Watch, Flood Watch, Lakeshore Flood Watch          | Coastal Flood Warning, Flash Flood Warning, Flood Warning, Lakeshore Flood Warning                                                                                              |
+| **Tsunami**        | Tsunami Advisory                                                                                                                                                                 | Tsunami Watch                                                                       | Tsunami Warning                                                                                                                                                                 |
+| **Tornado**        | —                                                                                                                                                                               | Tornado Watch                                                                       | Tornado Warning                                                                                                                                                                 |
+| **Hurricane**      | Tropical Cyclone Local Statement                                                                                                                                                 | Hurricane Watch, Storm Surge Watch, Tropical Storm Watch, Typhoon Watch             | Hurricane Warning, Storm Surge Warning, Tropical Storm Warning, Typhoon Warning                                                                                                 |
+| **Thunderstorms**  | —                                                                                                                                                                               | Severe Thunderstorm Watch, Storm Watch                                              | Severe Thunderstorm Warning, Storm Warning                                                                                                                                      |
+| **Wind**           | Brisk Wind Advisory, Lake Wind Advisory, Wind Advisory                                                                                                                           | Gale Watch, High Wind Watch, Hurricane Force Wind Watch                             | Extreme Wind Warning, Gale Warning, High Wind Warning, Hurricane Force Wind Warning                                                                                             |
+| **Dust**           | Blowing Dust Advisory, Dust Advisory                                                                                                                                             | —                                                                                  | Blowing Dust Warning, Dust Storm Warning                                                                                                                                        |
+| **Fog**            | Dense Fog Advisory, Freezing Fog Advisory                                                                                                                                        | —                                                                                  | —                                                                                                                                                                              |
+| **Winter Weather** | Avalanche Advisory, Freezing Spray Advisory, Winter Weather Advisory                                                                                                             | Avalanche Watch, Extreme Cold Watch, Heavy Freezing Spray Watch, Winter Storm Watch | Avalanche Warning, Blizzard Warning, Extreme Cold Warning, Heavy Freezing Spray Warning, Ice Storm Warning, Lake Effect Snow Warning, Snow Squall Warning, Winter Storm Warning |
+| **Heat**           | Heat Advisory                                                                                                                                                                    | Extreme Heat Watch                                                                  | Extreme Heat Warning                                                                                                                                                            |
+| **Wildfire**       | Ashfall Advisory, Extreme Fire Danger                                                                                                                                            | Fire Weather Watch                                                                  | Ashfall Warning, Fire Warning, Red Flag Warning                                                                                                                                 |
+| **Volcano**        | —                                                                                                                                                                               | —                                                                                  | Volcano Warning                                                                                                                                                                 |
+| **Beach Hazards**  | Beach Hazards Statement, High Surf Advisory, Rip Current Statement                                                                                                               | —                                                                                  | High Surf Warning                                                                                                                                                               |
+| **Marine**         | Low Water Advisory, Marine Weather Statement, Small Craft Advisory                                                                                                               | Hazardous Seas Watch                                                                | Hazardous Seas Warning, Special Marine Warning                                                                                                                                  |
+| **Air Quality**    | Air Quality Alert, Air Stagnation Advisory, Dense Smoke Advisory                                                                                                                 | —                                                                                  | —                                                                                                                                                                              |
+| **Cold**           | Cold Weather Advisory, Frost Advisory                                                                                                                                            | Freeze Watch                                                                        | Freeze Warning                                                                                                                                                                  |
+| **Weather**        | Hazardous Weather Outlook, Severe Weather Statement, Special Weather Statement                                                                                                   | —                                                                                  | —                                                                                                                                                                              |
+| **Earthquake**     | —                                                                                                                                                                               | —                                                                                  | Earthquake Warning                                                                                                                                                              |
+| **Other Hazards**  | 911 Telephone Outage, Blue Alert, Child Abduction Emergency, Civil Emergency Message, Evacuation Immediate, Local Area Emergency                                                 | —                                                                                  | Civil Danger Warning, Hazardous Materials Warning, Law Enforcement Warning, Nuclear Power Plant Warning, Radiological Hazard Warning, Shelter In Place Warning                  |
+
+The following NWS alert types are intentionally ignored and will never appear in any sensor: `Administrative Message`, `Short Term Forecast`, `Test`.
 
 The full list of NWS alert event types is available at: [https://api.weather.gov/alerts/types](https://api.weather.gov/alerts/types)
+
+## Automation Examples
+
+Trigger a notification when a Tornado Warning is issued:
+
+```yaml
+automation:
+  - alias: "Notify on Tornado Warning"
+    trigger:
+      - platform: state
+        entity_id: sensor.home_tornado
+        to: "warning"
+    action:
+      - service: notify.mobile_app
+        data:
+          title: "Tornado Warning"
+          message: >
+            {{ state_attr('sensor.home_tornado', 'active_alerts') | join(', ') }}
+```
+
+Trigger on any warning-level alert across all categories:
+
+```yaml
+automation:
+  - alias: "Notify on any Warning"
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.home_tornado
+          - sensor.home_flood
+          - sensor.home_winter_weather
+          - sensor.home_thunderstorms
+        to: "warning"
+    action:
+      - service: notify.mobile_app
+        data:
+          title: "Weather Warning"
+          message: "{{ trigger.to_state.name }}: {{ state_attr(trigger.entity_id, 'active_alerts') | join(', ') }}"
+```
+
+Replace `home` in the entity IDs with the slug form of your Friendly Name (lowercase, spaces replaced with underscores).
 
 ## Testing
 
