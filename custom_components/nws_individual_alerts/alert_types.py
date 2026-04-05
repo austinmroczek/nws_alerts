@@ -108,6 +108,8 @@ ALERT_GROUPS: dict[str, frozenset[str]] = {
         "Winter Weather Advisory",
     }),
     "Heat": frozenset({
+        "Excessive Heat Warning",
+        "Excessive Heat Watch",
         "Extreme Heat Warning",
         "Extreme Heat Watch",
         "Heat Advisory",

@@ -1,0 +1,32 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.xyz999.001.1",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "areaDesc": "Test County",
+        "sent": "2024-07-18T12:00:00-07:00",
+        "effective": "2024-07-18T12:00:00-07:00",
+        "onset": "2024-07-18T12:00:00-07:00",
+        "expires": "2024-07-18T14:00:00-07:00",
+        "ends": null,
+        "status": "Actual",
+        "messageType": "Alert",
+        "severity": "Minor",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "event": "Completely Unknown Event Warning",
+        "sender": "w-nws.webmaster@noaa.gov",
+        "senderName": "NWS Test",
+        "description": "An unknown event.",
+        "instruction": null,
+        "response": "Monitor",
+        "parameters": {}
+      }
+    }
+  ],
+  "title": "Current alerts",
+  "updated": "2024-07-18T19:50:06+00:00"
+}
