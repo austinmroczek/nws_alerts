@@ -1,33 +1,20 @@
-# Alerts from the US National Weather Service  (nws_individual_alerts)
+# NWS Individual Alerts
 
-## Breaking Change for V5.0
+Retrieves active weather alerts from the US National Weather Service API and exposes them as Home Assistant sensors.
 
-Modified the format of the list of event_id in the attributes
+Based on the original work by [@eracknaphobia](https://github.com/eracknaphobia/nws_custom_component) and [@finity69x2](https://github.com/finity69x2/nws_alerts).
 
-## Description
+## What it creates
 
-An updated version of the nws_individual_alerts custom integration for Home Assistant originally found at github.com/eracknaphobia/nws_custom_component
+- **Alert count sensor** — state is the number of currently active alerts, with full alert details in the `Alerts` attribute
+- **Category sensors** — one sensor per alert category (Tornado, Flood, Heat, Wildfire, etc.) reporting the highest active severity level: `none`, `advisory`, `watch`, or `warning`
 
-This integration retrieves updated weather alerts every minute from the US NWS API.
+## Configuration
 
-The integration presents the number of currently active alerts as the state of the sensor and lists many alert details as a list in the attributes of the sensor.
+After installation, go to **Settings → Devices & Services → Add Integration** and search for **NWS Individual Alerts**.
 
-The sensor that is created is used in my "NWS Alerts Custom" package - https://github.com/finity69x2/NWS-Alerts-Custom-Package
+Choose a lookup method:
 
-## Installation:
-
-Clone the Repository and copy the "nws_individual_alerts" directory to your "custom_components" directory in your config directory
-
-```<config directory>/custom_components/nws_individual_alerts/...```
-  
-## Configuration:
-
-You can find your Zone or County ID by going to https://alerts.weather.gov/, scroll down to your state and click on the “zone list” and/or "county list" then look for the entry for your county.
-
-The intergration is configured via the "Configuration->Integrations" section of the Home Assistant UI.
-
-Look for the integration labeled "NWS Alerts" and follow the on-screen prompts.
-
-Using the configuration example above by default the sensor will then be called "sensor.nws_individual_alerts".
-
-If desired you can modify the sensor name via the UI in the initial configuration or later in the entity configuration dialogue box.
+- **Zone ID** — enter your NWS zone or county code (e.g. `OHC049`). Find yours at [alerts.weather.gov](https://alerts.weather.gov/) under your state's zone or county list. Separate multiple zones with commas.
+- **GPS Coordinates** — uses your Home Assistant home location.
+- **Device Tracker** — uses the GPS position of a tracked device for location-aware alerts.

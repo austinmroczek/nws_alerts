@@ -2,10 +2,10 @@
   "config": {
     "step": {
       "user": {
-        "description": "Please select your NWS lookup method.\n\nFor a brief explanation of the advantages and disadvantages of each method please see [here](https://github.com/austinmroczek/nws_alerts/blob/master/lookup_options.md).\n\nIf you don't know which is better for your situation, you should probably select the Zone ID version.",
+        "description": "Please select your NWS lookup method.\n\nGPS Location is recommended for most users as it provides the most accurate alerts for your precise location.\n\nZone ID covers a broader area and may include alerts that do not affect your exact location.",
         "menu_options": {
-          "zone": "Zone ID (more generalized location - includes County ID if applicable)",
-          "gps": "GPS Location (precise location)"
+          "gps": "GPS Location (recommended — precise location)",
+          "zone": "Zone ID (broader area — includes County ID if applicable)"
         }
       },
       "gps": {
@@ -47,10 +47,10 @@
   "options": {
     "step": {
       "user": {
-        "description": "Please select your NWS lookup method.\n\nFor a brief explanation of the advantages and disadvantages of each method please see [here](https://github.com/austinmroczek/nws_alerts/blob/master/lookup_options.md).\n\nIf you don't know which is better for your situation, you should probably select the Zone ID version.",
+        "description": "Please select your NWS lookup method.\n\nGPS Location is recommended for most users as it provides the most accurate alerts for your precise location.\n\nZone ID covers a broader area and may include alerts that do not affect your exact location.",
         "menu_options": {
-          "zone": "Zone ID (more generalized location - includes County ID if applicable)",
-          "gps": "GPS Location (precise location)"
+          "gps": "GPS Location (recommended — precise location)",
+          "zone": "Zone ID (broader area — includes County ID if applicable)"
         }
       },
       "gps": {

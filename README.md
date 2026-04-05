@@ -29,15 +29,13 @@ Go to **Settings → Devices & Services**, click **+ Add Integration**, search f
 
 ### Lookup methods
 
-Choose the method that best fits your situation:
-
-**Zone ID** — Enter one or more NWS zone or county codes (e.g. `OHC049` or `OHZ033,OHZ034`). This is the most reliable option and matches how NWS issues alerts — each alert targets specific zones, so a zone lookup will never miss an alert for your area. Best choice for a fixed location.
-
-To find your zone code: go to [alerts.weather.gov](https://alerts.weather.gov/), click "Land areas with zones", scroll to your state, then click "public zones" or "county zones". Your code is listed above the location name. Separate multiple zones with commas.
-
-**GPS Coordinates** — Uses your Home Assistant latitude/longitude to query alerts for your precise location. The NWS API finds all zones that contain that point and returns their active alerts. Useful if you want alerts scoped to a specific address rather than a broader zone.
+**GPS Coordinates (recommended)** — Uses your Home Assistant latitude/longitude to query alerts for your precise location. The NWS API finds all zones that contain that point and returns only the alerts that affect you. This is the most accurate option for most users.
 
 **Device Tracker** — Uses the GPS coordinates reported by a Home Assistant device tracker entity. The integration queries the NWS API using wherever the device is currently located. Use this if you want alerts that follow a person or vehicle.
+
+**Zone ID** — Enter one or more NWS zone or county codes (e.g. `OHC049` or `OHZ033,OHZ034`). Zones cover a broader geographic area than a single point, so this method may include alerts that don't affect your exact location. Useful if GPS isn't available or you intentionally want broader coverage.
+
+To find your zone code: go to [alerts.weather.gov](https://alerts.weather.gov/), click "Land areas with zones", scroll to your state, then click "public zones" or "county zones". Your code is listed above the location name. Separate multiple zones with commas.
 
 After saving, the integration creates sensors under the name you entered as the Friendly Name during setup.
 

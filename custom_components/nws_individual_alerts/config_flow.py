@@ -34,7 +34,7 @@ JSON_PROPERTIES = "properties"
 JSON_ID = "id"
 
 _LOGGER = logging.getLogger(__name__)
-MENU_OPTIONS: list[str] = ["zone", "gps"]
+MENU_OPTIONS: list[str] = ["gps", "zone"]
 MENU_GPS: list[str] = ["gps_loc", "gps_tracker"]
 
 
