@@ -47,23 +47,24 @@ It exposes one attribute:
 
 **`Alerts`** — a list of all active alerts, each with the following fields:
 
-| Field | Description |
-| --- | --- |
-| `Event` | NWS event type name (e.g. `Tornado Warning`) |
-| `Headline` | Short headline for the alert |
-| `ID` | Stable UUID derived from the NWS alert ID |
-| `URL` | Direct URL to the alert on api.weather.gov |
-| `Type` | Message type (`Alert`, `Update`, or `Cancel`) |
-| `Status` | Alert status (`Actual`, `Test`, etc.) |
-| `Severity` | NWS severity (`Extreme`, `Severe`, `Moderate`, `Minor`, `Unknown`) |
-| `Certainty` | NWS certainty (`Observed`, `Likely`, `Possible`, `Unlikely`, `Unknown`) |
-| `Sent` | ISO timestamp when the alert was issued |
-| `Onset` | ISO timestamp when the hazard is expected to begin |
-| `Expires` | ISO timestamp when the alert expires |
-| `Ends` | ISO timestamp when the hazard is expected to end (may be null) |
-| `AreasAffected` | Free-text description of the affected areas |
-| `Description` | Full alert text |
-| `Instruction` | Recommended safety actions (may be null) |
+
+| Field           | Description                                                             |
+| ----------------- | ------------------------------------------------------------------------- |
+| `Event`         | NWS event type name (e.g.`Tornado Warning`)                             |
+| `Headline`      | Short headline for the alert                                            |
+| `ID`            | Stable UUID derived from the NWS alert ID                               |
+| `URL`           | Direct URL to the alert on api.weather.gov                              |
+| `Type`          | Message type (`Alert`, `Update`, or `Cancel`)                           |
+| `Status`        | Alert status (`Actual`, `Test`, etc.)                                   |
+| `Severity`      | NWS severity (`Extreme`, `Severe`, `Moderate`, `Minor`, `Unknown`)      |
+| `Certainty`     | NWS certainty (`Observed`, `Likely`, `Possible`, `Unlikely`, `Unknown`) |
+| `Sent`          | ISO timestamp when the alert was issued                                 |
+| `Onset`         | ISO timestamp when the hazard is expected to begin                      |
+| `Expires`       | ISO timestamp when the alert expires                                    |
+| `Ends`          | ISO timestamp when the hazard is expected to end (may be null)          |
+| `AreasAffected` | Free-text description of the affected areas                             |
+| `Description`   | Full alert text                                                         |
+| `Instruction`   | Recommended safety actions (may be null)                                |
 
 A second sensor named `<friendly_name> Last Updated` reports the timestamp of the most recent successful API fetch.
 
@@ -161,3 +162,7 @@ If there are currently no active alerts for your location but you want to do tes
 To find those locations go to: https://api.weather.gov/alerts/active/count you will see a list of all areas with active alerts and how many alerts are active for each area.
 
 You can use the given code(s) in your config to get the alerts for the selected zones in the integration.
+
+## Credit
+
+Based on the original work by [@eracknaphobia](https://github.com/eracknaphobia/nws_custom_component) and [@finity69x2](https://github.com/finity69x2/nws_alerts).
