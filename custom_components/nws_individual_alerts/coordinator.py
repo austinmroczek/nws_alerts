@@ -35,12 +35,13 @@ _LOGGER = logging.getLogger(__name__)
 class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching NWS Alert data."""
 
-    def __init__(self, hass: HomeAssistant, config: dict, the_timeout: int, interval: int) -> None:
+    def __init__(self, hass: HomeAssistant, config: dict, the_timeout: int, interval: int, entry_id: str) -> None:
         """Initialize."""
         self.interval = timedelta(minutes=interval)
         self.name = config[CONF_NAME]
         self.timeout = the_timeout
         self.config = config
+        self.user_agent = f"{USER_AGENT} ({entry_id})"
 
         _LOGGER.debug("Data will be update every %s", self.interval)
 
@@ -53,7 +54,7 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
             coords = await self._get_tracker_gps()
         try:
             async with asyncio.timeout(self.timeout):
-                data = await async_fetch_alerts(self.hass, self.config, coords)
+                data = await async_fetch_alerts(self.hass, self.config, coords, self.user_agent)
         except Exception as error:
             _LOGGER.warning(
                 "Error fetching NWS Alerts data, keeping last known state: %s", error
@@ -75,18 +76,18 @@ class AlertsDataUpdateCoordinator(DataUpdateCoordinator):
 
 
 async def async_fetch_alerts(
-    hass: HomeAssistant, config: dict, coords: str | None
+    hass: HomeAssistant, config: dict, coords: str | None, user_agent: str
 ) -> dict:
     """Determine the query target from config and fetch alerts."""
     if CONF_ZONE_ID in config:
-        return await async_get_alerts(hass, zone_id=config[CONF_ZONE_ID])
+        return await async_get_alerts(hass, user_agent, zone_id=config[CONF_ZONE_ID])
 
     gps_loc = coords if coords is not None else config[CONF_GPS_LOC].replace(" ", "")
-    return await async_get_alerts(hass, gps_loc=gps_loc)
+    return await async_get_alerts(hass, user_agent, gps_loc=gps_loc)
 
 
 async def async_get_alerts(
-    hass: HomeAssistant, zone_id: str = "", gps_loc: str = ""
+    hass: HomeAssistant, user_agent: str, zone_id: str = "", gps_loc: str = ""
 ) -> dict:
     """Query the NWS alerts API and return parsed alert data."""
     if zone_id:
@@ -98,7 +99,7 @@ async def async_get_alerts(
     else:
         return {}
 
-    headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
+    headers = {"User-Agent": user_agent, "Accept": "application/geo+json"}
     session = async_get_clientsession(hass)
 
     async with session.get(url, headers=headers) as r:

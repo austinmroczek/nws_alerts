@@ -51,6 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         config_entry.data,
         config_entry.data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT),
         config_entry.data.get(CONF_INTERVAL, DEFAULT_INTERVAL),
+        config_entry.entry_id,
     )
 
     # Fetch initial data so we have data when entities subscribe
